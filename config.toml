@@ -1,0 +1,30 @@
+baseURL = "http://localhost:3"
+languageCode = "en-us"
+title = "Hashi@Home"
+theme = "gohugo-theme-ananke-master"
+DefaultContentLanguage = "en"
+SectionPagesMenu = "main"
+enablegitinfo = true
+[params]
+  background_color_class = "bg-navy"
+  custom_css = ["css/syntax.css"]
+  body_classes = "avenir bg-near-white"
+  site_logo = "img/UVTEsXZs_400x400-tiny.png"
+  show_reading_time = true
+  favicon = ""
+  description = "The last theme you'll ever need. Maybe."
+  twitter = "https://twitter.com/brusisceddu"
+  github = "https://github.com/brucellino"
+  gitlab = ""
+  linkedin = ""
+  mastodon = ""
+  slack = ""
+  stackoverflow = ""
+  rss = ""
+  # choose a background color from any on this page: http://tachyons.io/docs/themes/skins/ and preface it with "bg-"
+  recent_posts_number = 2
+[menu]
+  [[ menu.main ]]
+    identifier = "about"
+    name="About"
+    url = "/about/"
