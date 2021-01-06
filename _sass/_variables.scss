@@ -1,17 +1,15 @@
 
 // Font family
 $header-font-family: 'Fugaz One', cursive;
-
 $mono-font-family: 'IBM Plex Mono', monospace;
-
 $body-font-family: 'Montserrat', sans-serif;
 $body-font-size: 16px;
 $prose-font-size: 20px;
 
 
 // Type scale
-$h0-mobile: 64px;
-$h0-desktop: 128px;
+$h0-mobile: 32px;
+$h0-desktop: 64px;
 
 $h1-size: 40px !default;
 $h2-size: 32px !default;
@@ -24,7 +22,7 @@ $h6-size: 12px !default;
 $color-border: #ddd !default;
 
 // Container width
-$container-width: 64em;
+$container-width: 90em;
 
 // Large breakpoint
 $breakpoint-lg: 52em;
