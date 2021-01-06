@@ -4,10 +4,9 @@ title: >-
   Home
 email: brucellino@hey.com
 description: >-
-  <em>"If you're gonna do something, do it yourself."</em>
-  The story of using Hashicorp products at home on Raspberry Pis
+  Sharp tools, sharp mind. The story of using Hashicorp tools in a home-made setup
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://hashiatho.me" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: brusisceddu
 github_username:  brucellino
 
