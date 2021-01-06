@@ -1,0 +1,29 @@
+// solarized theme
+
+// Color variables
+$white: #fbfefb;
+$charcoal: #264653;
+$persian-green: #2A9D8F;
+$yellow-crayola: #E9C46A;
+$sandy-brown: #F4A261;
+$burnt-sienna: #E76F51;
+
+// Config
+$color-background: $charcoal !default;
+$color-dot-accent: $burnt-sienna !default;
+$color-foreground: $persian-green !default;
+$color-title: $white !default;
+$color-body-text: $charcoal !default;
+$color-text-accent: $burnt-sienna !default;
+$color-code: $charcoal !default;
+$color-nav-link: $sandy-brown !default;
+$color-primary-link: $yellow-crayola !default;
+
+
+// Import sass partials (used in all themes)
+@import
+        "variables",
+        "base",
+        "components",
+        "utilities"
+;

@@ -1,0 +1,34 @@
+---
+title: >-
+  Hashi @
+  Home
+email: brucellino@hey.com
+description: >-
+  <em>"If you're gonna do something, do it yourself."</em>
+  The story of using Hashicorp products at home on Raspberry Pis
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
+twitter_username: brusisceddu
+github_username:  brucellino
+
+# Build settings
+markdown: kramdown
+plugins:
+  - jekyll-feed
+pages:
+  - title: About
+    url: /about
+  - title: GitHub
+    url: /repo
+theme_color: solarized
+# Exclude from processing.
+# The following items will not be processed, by default. Create a custom list
+# to override the default setting.
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
