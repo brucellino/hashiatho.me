@@ -14,11 +14,6 @@ github_username:  brucellino
 markdown: kramdown
 plugins:
   - jekyll-feed
-pages:
-  - title: About
-    url: /about
-  - title: GitHub
-    url: /repo
 theme_color: solarized
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
