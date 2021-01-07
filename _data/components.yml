@@ -1,0 +1,6 @@
+---
+# components that hashi@home is made out of
+- name: consul
+  icon: consul.png
+- name: vault
+  icon: vault.png
