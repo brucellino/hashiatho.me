@@ -9,9 +9,23 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://hashiatho.me" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: brusisceddu
 github_username:  brucellino
-
+highlighter: rouge
 # Build settings
 markdown: kramdown
+kramdown:
+  syntax_highlighter: rouge
+  input: GFM
+  auto_ids: true
+  toc_levels: 1..4
+  syntax_highlighter_opts:
+    # Rouge Options › https://github.com/jneen/rouge#full-options
+    css_class: 'highlight'
+    #line_numbers: true # bad idea, spans don't need linenos and would inherit this option
+    span:
+      line_numbers: false
+    block:
+      line_numbers: true
+      start_line: 1
 plugins:
   - jekyll-feed
 theme_color: solarized
