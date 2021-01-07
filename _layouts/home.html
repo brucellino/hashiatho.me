@@ -22,13 +22,17 @@
         </div>
 
         <div class="container mx-auto px-2 mb-2 clearfix header-text">
-          <h1 class="h0 inline-block col-9 sm-width-full py-4 mt-3 header-title">{{ site.title }}</h1>
+          <h1 class="h0 inline-block col-9 sm-width-full py-3 mt-3 header-title">{{ site.title }}</h1>
 
           <div class="clearfix mb-4 py-1">
             <div class="col-4 sm-width-full left border-top-thin">
               <div class="table">
+                <div class="h4 lh-condensed font-smoothing mt-2 py-1">Made with</div>
                 <div class="inline-block mt-3 mr-1">
-                  {% include dot-accent.html %}
+                  {% include dot-ansible.html %}
+                </div>
+                <div class="inline-block mt-3 mr-1">
+                  {% include dot-terraform.html %}
                 </div>
                 <div class="inline-block mt-3 mr-1">
                   {% include dot-nomad.html %}
@@ -36,20 +40,26 @@
                 <div class="inline-block mt-3 mr-1">
                   {% include dot-vault.html %}
                 </div>
-                <div class="inline-block mt-3">
+                <div class="inline-block mt-3 mr-1">
                   {% include dot-consul.html %}
+                </div>
+                <div class="inline-block mt-3">
+                  {% include dot-rpi.html %}
                 </div>
               </div>
               <!-- Set site description in config.yml -->
-              <p class="h4 lh-condensed font-smoothing mt-2 py-1">{{ site.description }}</p>
             </div>
 
             <div class="col-4 sm-width-full left border-top-thin mt-3 mt-lg-0 ml-lg-4 table">
+              <p class="h4 lh-condensed font-smoothing mt-2 py-1">{{ site.description }}</p>
                 <div class="inline-block mt-3 mr-1">
                   {% include github.html %}
                 </div>
-                <div class="inline-block mt-3">
+                <div class="inline-block mt-3 mr-1">
                   {% include {{ site.social_link | default: "twitter" }}.html %}
+                </div>
+                <div class="h4 lh-condensed font-smoothing inline-block mt-3">
+                  by Bruce Becker
                 </div>
             </div>
           </div>
