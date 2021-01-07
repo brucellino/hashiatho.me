@@ -23,6 +23,99 @@ dl, dd, ol, ul, figure {
     padding: 0;
 }
 
+figure {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin: 0;
+  *zoom: 1;
+  padding-top: 3.2em;
+  padding-bottom: 3.2em;
+}
+
+figure:before,
+figure:after {
+  display: table;
+  line-height: 0;
+  content: "";
+}
+
+figure:after {
+  clear: both;
+}
+
+figure img {
+  display: block;
+  margin-right: auto;
+  margin-bottom: 10px;
+  margin-left: auto;
+  width: 75%;
+  border-radius: 5;
+  border-width: 2;
+  border-color: $persian-green;
+}
+
+figcaption {
+  padding-top: 1.6em;
+  padding-bottom: 1.6em;
+  text-align: justify;
+  margin: auto;
+  font-family: $header-font-family;
+  font-size: 1.2em;
+  max-width: 50%;
+}
+
+
+figure a img {
+  filter: gray; /* IE6-9 */
+  -webkit-filter: brightness(80%); /* Google Chrome & Safari 6+ */
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+  -webkit-transition-duration: 0.25s;
+  -moz-transition-duration: 0.25s;
+  -o-transition-duration: 0.25s;
+}
+
+figure a img:hover {
+  filter: none;
+  -webkit-filter: brightness(110%);
+  -webkit-transform: translate(0, -5px);
+  -moz-transform: translate(0, -5px);
+  -ms-transform: translate(0, -5px);
+  -o-transform: translate(0, -5px);
+  transform: translate(0, -5px);
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+@media only screen and (min-width: 62.5em) {
+  figure.half img {
+    float: left;
+    width: 365px;
+    margin-right: 5px;
+    margin-left: 5px;
+  }
+
+  figure.half figcaption {
+    clear: left;
+  }
+}
+
+@media only screen and (min-width: 62.5em) {
+  figure.third img {
+    float: left;
+    width: 240px;
+    margin-right: 5px;
+    margin-left: 5px;
+  }
+
+  figure.third figcaption {
+    clear: left;
+  }
+}
+
 
 /**
  * Basic styling
