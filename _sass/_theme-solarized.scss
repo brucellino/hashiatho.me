@@ -19,11 +19,23 @@ $color-code: $charcoal !default;
 $color-nav-link: $sandy-brown !default;
 $color-primary-link: $yellow-crayola !default;
 
+$primary-color: $charcoal !default;
+$primary-color-light: lighten($primary-color, 15%) !default;
+$primary-color-dark: darken($primary-color, 15%) !default;
+
+$secondary-color: $persian-green !default;
+$success-color: $persian-green !default;
+$error-color: $burnt-sienna !default;
+$link-color: $yellow-crayola !default;
+$collection-line-height: 1.5rem !default;
+$sidenav-item-height: 48px !default;
+$sidenav-line-height: $sidenav-item-height !default;
 
 // Import sass partials (used in all themes)
 @import
         "variables",
         "base",
         "components",
-        "utilities"
+        "utilities",
+        "badges"
 ;
