@@ -28,6 +28,7 @@ kramdown:
       start_line: 1
 plugins:
   - jekyll-feed
+  - jekyll-compose
 theme_color: solarized
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
