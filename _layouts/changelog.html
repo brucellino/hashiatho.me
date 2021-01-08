@@ -1,17 +1,14 @@
 ---
 layout: page
 ---
-{{ site.github.releases }}
 {% assign n_releases = site.github.releases | size %}
 <p class="prose">
 This project uses <b><em><a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a></em></b> and <b><em><a href="https://semantic-release.gitbook.io/">Semantic Release</a></em></b> to automate releases via the commit log.
 </p>
-{% if n_releases > 1 %}
-<ul>
+{% if n_releases >= 1 %}
 {% for v in site.github.releases  %}
-  <li>{{ v }}</li>
+  {{ v.body | markdownify |replace: 'h1', 'h2'| strip_newlines}}
 {% endfor %}
-</ul>
 {% else %}
 <h2>No releases yet</h2>
 {% endif %}
