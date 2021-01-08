@@ -262,6 +262,7 @@ PLATFORMS
 DEPENDENCIES
   github-pages (~> 209)
   jekyll-compose (~> 0.12.0)
+  jemoji (~> 0.12.0)
 
 BUNDLED WITH
    2.2.2

@@ -29,6 +29,7 @@ kramdown:
 plugins:
   - jekyll-feed
   - jekyll-compose
+  - jemoji
 theme_color: solarized
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
