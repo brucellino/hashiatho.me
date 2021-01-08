@@ -16,6 +16,7 @@ source 'https://rubygems.org'
 
 # If you have any plugins, put them here!
 group :jekyll_plugins do
+  gem "jekyll-compose", "~> 0.12.0"
 end
 
 gem 'github-pages', '~> 209'
