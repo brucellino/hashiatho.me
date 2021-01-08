@@ -1,4 +1,4 @@
 ---
 layout: changelog
-title: changelog
+title: Changelog
 ---
