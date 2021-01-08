@@ -12,6 +12,7 @@ github_username:  brucellino
 highlighter: rouge
 # Build settings
 markdown: kramdown
+repository: brucellino/hashiatho.me
 kramdown:
   syntax_highlighter: rouge
   input: GFM
@@ -30,6 +31,7 @@ plugins:
   - jekyll-feed
   - jekyll-compose
   - jemoji
+  - jekyll-github-metadata
 theme_color: solarized
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
