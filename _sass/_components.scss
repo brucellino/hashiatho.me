@@ -10,10 +10,11 @@ pre {
 }
 
 code {
-    color: $color-code;
-    font-size: $body-font-size;
+    color: $burnt-sienna;
+    font-size: 1.2em;
     font-family: $mono-font-family;
     padding: 1px 0px;
+    font-weight:
 }
 
 
@@ -30,6 +31,7 @@ code {
   p, ol, ul {
     font-size: $prose-font-size;
     margin-bottom: 1em;
+    margin-top: 1em;
     width: 100%;
 
     @media (min-width: $breakpoint-lg) {

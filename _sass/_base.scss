@@ -24,12 +24,12 @@ dl, dd, ol, ul, figure {
 }
 
 figure {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  margin: 0;
+  padding-top: 2px;
+  padding-bottom: 3px;
+  margin: 2;
   *zoom: 1;
-  padding-top: 3.2em;
-  padding-bottom: 3.2em;
+  // padding-top: 3.2em;
+  // padding-bottom: 3.2em;
 }
 
 figure:before,
