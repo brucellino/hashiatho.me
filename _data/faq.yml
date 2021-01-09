@@ -23,6 +23,7 @@
     - [Swiss theme](https://github.com/broccolini/swiss) for the styling
     - [atom](https://atom.io) as an editor
     - [GitHub pages](https://pages.github.com) for the hosting
+    - [GitHub actions](https://github.com/features/actions) for continuous delivery, including [semantic release](semantic-release.gitbook.io/)
     - [Hover](https://hover.com) for the domain name.
 
     Long version might come in a blog post sometime.
@@ -37,3 +38,7 @@
 
 - q: Are you literally going to just put Hashi in front of everything now?
   a: Jury's out. It worked for Batman and the Smurfs, so who am I to judge?
+
+- q: Do you hate the cloud?
+  a: |-
+    Stop calling it that. The correct term is "other peoples' computers as a service". I can love my computers and also not care about other peoples' comptuers. The idea here is to learn something that I can't learn somewhere else. Yes, I have to learn all the cloud stuff for work, but it feels like I'm spending [company scrip](https://en.m.wikipedia.org/wiki/Company_scrip). **I hate company scrip**.
