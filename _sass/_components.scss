@@ -1,25 +1,21 @@
 // Styling markdown output
-
 // Code formatting
 pre {
-    border-left: $spacer-1 solid $color-border;
-    margin: $spacer-3 0;
-    padding-left: 16px;
-    width: (9 / 12 * 100%); // matches col-9
-    overflow-x: auto;
+  border-left: $spacer-1 solid $color-border;
+  margin: $spacer-3 0;
+  overflow-x: auto;
+  padding-left: 16px;
+  width: (9 / 12 * 100%); // matches col-9
 }
 
 code {
-    color: $burnt-sienna;
-    font-size: 1.2em;
-    font-family: $mono-font-family;
-    padding: 1px 0px;
-    font-weight:
+  color: $burnt-sienna;
+  font-family: $mono-font-family;
+  font-size: 1.2em;
+  padding: 1px 0;
 }
 
-
 .prose {
-
   a {
     text-decoration: underline dotted;
 
@@ -28,7 +24,9 @@ code {
     }
   }
 
-  p, ol, ul {
+  ol,
+  p,
+  ul {
     font-size: $prose-font-size;
     margin-bottom: 1em;
     margin-top: 1em;
@@ -37,106 +35,99 @@ code {
     @media (min-width: $breakpoint-lg) {
       width: (10 / 12 * 100%); // matches col-10
     }
-
   }
 
-  ul, ol {
+  ol,
+  ul {
     padding-left: 40px;
   }
 
   li {
-    margin-bottom: 0.5em;
+    margin-bottom: .5em;
 
-    ul li, ol li {
+    ol li,
+    ul li {
       margin-bottom: 0;
     }
   }
 
   img {
-
     max-width: 100%;
 
     @media (min-width: $breakpoint-lg) {
       max-width: (12 / 10 * 100%); // make image fill width of container on desktop
     }
-
   }
 
   blockquote {
-    line-height: 1.375;
-    padding-left: 20px;
-    margin: 40px 0 40px -16px;
     border-left: $spacer-1 solid $color-border;
     font-style: italic;
+    line-height: 1.375;
+    margin: 40px 0 40px -16px;
+    padding-left: 20px;
 
     p {
       font-size: 24px;
     }
 
     @media (min-width: $breakpoint-lg) {
-      padding-left: $spacer-3;
       margin: $spacer-4 0 $spacer-4 -40px;
       max-width: (11 / 10 * 100%);
+      padding-left: $spacer-3;
 
       p {
         font-size: 32px;
       }
-
     }
-
   }
 
   hr {
-    color: $color-body-text;
     border-style: solid;
     border-width: thin;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
+    color: $color-body-text;
+    margin-bottom: .5em;
+    margin-top: .5em;
   }
 
   dt {
-    font-weight: bold;
     font-style: italic;
+    font-weight: bold;
     line-height: 1.25;
   }
 
   dd {
     font-style: italic;
-    margin-bottom: 0.5em;
+    margin-bottom: .5em;
   }
-
   // Markdown tables
   table {
     border-collapse: collapse;
     display: block;
-    width: 100%;
     margin-bottom: 1.5em;
     overflow: auto;
+    width: 100%;
     // For Firefox to horizontally scroll wider tables.
     word-break: normal;
-    word-break: keep-all;
+    // word-break: keep-all;
 
+    td,
     th {
+      border-bottom: 1px solid $color-body-text;
+      border-top: 1px solid $color-body-text;
       font-weight: bold;
+      padding: $spacer-2 $spacer-3 $spacer-2 2px;
       text-align: left;
     }
 
-    th,
-    td {
-      padding: $spacer-2 $spacer-3 $spacer-2 2px;
-      border-top: 1px solid $color-body-text;
-      border-bottom: 1px solid $color-body-text;
-    }
-
     tr {
-      background-color: #fff;
+      background-color: $white;
+      border-bottom: 2px solid $color-body-text;
       border-top: 1px solid $color-body-text;
     }
 
-    tr th {
-      border-top: 2px solid $color-body-text;
+    th {
       border-bottom: 2px solid $color-body-text;
+      border-top: 2px solid $color-body-text;
     }
   }
-
 }
