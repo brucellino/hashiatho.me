@@ -1,6 +1,14 @@
 ---
 # components that hashi@home is made out of
 - name: consul
-  icon: consul.png
+  icon: consul.svg
 - name: vault
-  icon: vault.png
+  icon: vault.svg
+- name: terraform
+  icon: terraform.svg
+- name: nomad
+  icon: nomad.svg
+- name: ansible
+  icon: ansible.svg
+- name: raspberry-pi
+  icon: raspberry-pi.svg
