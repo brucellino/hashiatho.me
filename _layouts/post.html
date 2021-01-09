@@ -4,14 +4,19 @@ layout: default
 {% assign components = site.data.components | map: "name" %}
 {% assign tags = page.tags | sort_natural %}
 <article class="container px-1 mx-auto mb4" itemscope itemtype="http://schema.org/BlogPosting">
-  <h1 class="h0 col-9 py-2 mt-3 inline-block" itemprop="name headline">{{ page.title }}</h1><p>
-{% for tag in tags %}
-  {% if components contains tag  %} <img href="" src="/assets/img/{{ tag }}.svg" /> {% endif %}
-  <span class="badge code mt-1 border-top-thin ">{{ tag }}</span>
-{%endfor%}
+  <h1 class="h0 col-9 py-2 mt-3 inline-block" itemprop="name headline">{{ page.title }}</h1>
+  <p>
+      {% for tag in tags %}
+        <span class="badge code mt-1 border-top-thin ">{{ tag }}</span>
+      {%endfor%}
   </p>
   <div class="col-4 mt-1 border-top-thin">
-    <p class="mb-3 py-3 bold h4"><time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%b %-d, %Y" }}</time></p>
+    <div class="py-3">
+    {% for tag in tags %}
+      {% if components contains tag  %} <img href="" src="/assets/img/{{ tag }}.svg" /> {% endif %}
+      {% endfor %}
+    </div>
+    <p class="mb-1 py-1 bold h4"><time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%b %-d, %Y" }}</time></p>
   </div>
   <div class="prose" itemprop="articleBody">
     {% include toc.html html=content sanitize=true class="inline_toc" id="my_toc" h_min=2 h_max=3 %}
