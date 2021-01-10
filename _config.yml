@@ -7,6 +7,10 @@ description: >-
   Sharp tools, sharp mind. The story of using Hashicorp tools in a home-made setup
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://hashiatho.me" # the base hostname & protocol for your site, e.g. http://example.com
+paginate: 1
+# paginate_path: "posts/:num"
+paginate_tag_basepath: '/tag/:name'
+
 twitter_username: brusisceddu
 github_username:  brucellino
 highlighter: rouge
@@ -32,6 +36,8 @@ plugins:
   - jekyll-compose
   - jemoji
   - jekyll-github-metadata
+  - jekyll-paginate
+  - jekyll-paginate-tags
 theme_color: solarized
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list

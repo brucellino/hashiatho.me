@@ -19,6 +19,8 @@ group :jekyll_plugins do
   gem 'jekyll-compose', '~> 0.12.0'
   gem 'jemoji', '~> 0.12.0'
   gem 'jekyll-github-metadata'
+  gem 'jekyll-paginate'
+  gem 'jekyll-paginate-tags'
 end
 
 gem 'github-pages', '~> 209'
