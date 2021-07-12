@@ -20,7 +20,7 @@ group :jekyll_plugins do
   gem 'jemoji', '~> 0.12.0'
   gem 'jekyll-github-metadata'
   gem 'jekyll-paginate'
-  gem 'jekyll-paginate-tags'
+  gem 'jekyll-paginate-tags', '>= 2.0.4'
 end
 
 gem 'github-pages', '~> 209'
