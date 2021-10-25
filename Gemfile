@@ -14,13 +14,4 @@ source 'https://rubygems.org'
 # uncomment the line below. To upgrade, run `bundle update github-pages`.
 # gem 'github-pages', group: :jekyll_plugins
 
-# If you have any plugins, put them here!
-group :jekyll_plugins do
-  gem 'jekyll-compose', '~> 0.12.0'
-  gem 'jemoji', '~> 0.12.0'
-  gem 'jekyll-github-metadata'
-  gem 'jekyll-paginate'
-  gem 'jekyll-paginate-tags', '>= 2.0.4'
-end
-
-gem 'github-pages', '~> 209'
+gem 'github-pages', '~> 217'

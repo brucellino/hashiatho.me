@@ -31,13 +31,6 @@ kramdown:
     block:
       line_numbers: true
       start_line: 1
-plugins:
-  - jekyll-feed
-  - jekyll-compose
-  - jemoji
-  - jekyll-github-metadata
-  - jekyll-paginate
-  - jekyll-paginate-tags
 theme_color: solarized
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
