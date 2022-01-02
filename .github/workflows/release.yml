@@ -33,5 +33,5 @@ jobs:
           node-version: 'lts/*'
       - name: Run release
         env:
-          GITHUB_TOKEN: ${{ secret.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release
