@@ -39,7 +39,7 @@ As such, they have been studied in diverse situations, and in many cases, codifi
 I'm referring here to basic, but crucial things such as code quality and conventions, release engineering, and requesting, tracking and delivering work, amongst others.
 I've taught at a lot of two-week boot camps, research projects and the like where the aim was to get a project up and running and deliver a MVP, but almost always, these fundamental practices are excluded from the curriculum.
 
-## Hashi@work
+### Hashi@work
 
 I had the great pleasure to use Terraform, Vault and Packer in a professional context a few months back.
 What I gained from that was the practical wisdom of how to infrastructure components and deliver applications which use them, across a few different clouds.
@@ -47,6 +47,24 @@ My current work experience has moved on-premise, where many of the comfortable f
 This gave me pause for thought on how to actually do this a way that is both _ergonomic_ for my team and I, as well as _reliable_ in the sense described above.
 When, one day, I move on to something new, I would like my work and the concepts which inspired it to remain and continue to provide value to the company.
 
-### Hashi on Digital Ocean
+## Hashi on Digital Ocean
 
-Due to the particular nature of the environment I'm working in, I need to have a hard separation between the work environment and my learning environment, so I
+Due to the particular nature of the environment I'm working in, I need to have a hard separation between the work environment and my learning environment, so I started using [Digital Ocean)](https://cloud.digitalocean.com) to set up small environments to test the results of my work.
+
+This was the first time I had used Digital Ocean in any serious way.
+Compared to my professional experience with AWS, I find it refreshingly simple, but lacking in a few key areas.
+For example, while there is private networking enabled by default, there doesn't seem to be any concept of an internet gateway, which the user is [expected to set up themselves](https://docs.digitalocean.com/products/networking/vpc/resources/droplet-as-gateway/).
+Another aspect was the need to refer to VPCs, images and SSH keys by ID rather than name in Packer templates, which was a bit surprising, and involved some manual labour.
+
+All of this has some implications for developing Terraform modules and Packer templates on Digital Ocean, but nonetheless I found the [pricing and billing](https://www.digitalocean.com/pricing) model congruent with the simplicity of the cloud services.
+Expecting to pay a cent per VM in a test execution is a very easy mental model to have in my brain, and ultimately convinced me that I could do something useful with this cloud rather than moving to another.
+
+## Developing re-usable components
+
+I set myself the goal of setting up an disposable, on-demand Consul cluster.
+This seemed like a useful thing in many circumstances, irrespective of environment.
+The plan to do this was as follows:
+
+1. Create a small Terraform module that produces a single small droplet on which to test Ansible roles
+1. Create an Ansible role which produces a secure re-usable base image on Digital Ocean
+1. Create an Ansible role which uses the result of step 1 and produces an
