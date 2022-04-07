@@ -13,6 +13,8 @@ tags:
   - reproducibility
 ---
 
+<a href="https://www.digitalocean.com/?refcode=ed3b69c0eec6&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge"><img src="https://web-platforms.sfo2.digitaloceanspaces.com/WWW/Badge%202.svg" alt="DigitalOcean Referral Badge" /></a>
+
 ## Introduction
 
 It has been about a year since I got it into my head that I wanted to play with what Hashicorp built.
@@ -68,3 +70,5 @@ The plan to do this was as follows:
 1. Create a small Terraform module that produces a single small droplet on which to test Ansible roles
 1. Create an Ansible role which produces a secure re-usable base image on Digital Ocean
 1. Create an Ansible role which uses the result of step 1 and produces an
+
+<a href="https://www.digitalocean.com/?refcode=ed3b69c0eec6&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge"><img src="https://web-platforms.sfo2.digitaloceanspaces.com/WWW/Badge%202.svg" alt="DigitalOcean Referral Badge" /></a>
