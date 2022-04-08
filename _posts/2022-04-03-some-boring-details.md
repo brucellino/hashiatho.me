@@ -13,7 +13,7 @@ tags:
   - reproducibility
 ---
 
-<a href="https://www.digitalocean.com/?refcode=ed3b69c0eec6&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge"><img src="https://web-platforms.sfo2.digitaloceanspaces.com/WWW/Badge%202.svg" alt="DigitalOcean Referral Badge" /></a>
+[![DigitalOcean Referral Badge](https://web-platforms.sfo2.digitaloceanspaces.com/WWW/Badge%202.svg)](https://www.digitalocean.com/?refcode=ed3b69c0eec6&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
 
 ## Introduction
 
@@ -69,6 +69,39 @@ The plan to do this was as follows:
 
 1. Create a small Terraform module that produces a single small droplet on which to test Ansible roles
 1. Create an Ansible role which produces a secure re-usable base image on Digital Ocean
-1. Create an Ansible role which uses the result of step 1 and produces an
+1. Create an Ansible role which uses the result of step 1 and produces an image which can be integrated into a Consul cluster.
+1. Create a Terraform module which will produced images to create a Consul cluster, along with the necessary cloud components, including DNS, certificates, _etc_.
 
-<a href="https://www.digitalocean.com/?refcode=ed3b69c0eec6&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge"><img src="https://web-platforms.sfo2.digitaloceanspaces.com/WWW/Badge%202.svg" alt="DigitalOcean Referral Badge" /></a>
+These tasks are achievable in a few days for anyone with a bit of experience with the toolkit (Ansible and Terraform) and time to read the respective documentation, but the question is: will it be **useful in the long run.**
+
+This is where the boring bits come into the equation, and the calculus is not trivial.
+Aspects such as reliable and high-quality test coverage, documentation, guardrails and examples take more time to develop than the actual components sometimes, and are only useful when the components are actually used in production, or by others.
+This is where the divergence in private and professional work becomes apparent.
+Hobby work or demonstrations can be done to emphasise a smart or fun way to do something.
+However, when your role is to enable others to achieve **their** goals rather than your own, the emphasis has to lie on the quality of the component rather than the mere functionality.
+
+As a result, I have collected aa small toolkit which I now rely on to help me achieve the high quality of component I try to aim for.
+
+- [TestInfra](https://testinfra.readthedocs.io/en/latest/): Writing good tests for compliance, functionality and security is one of the last things that is taught to DevOps professionals. My opinion is that part of the reason is the lack of a really good tool to implement write the tests in. I have used [Inspec](https://inspec.io) and [Terratest](https://terratest.gruntwork.io/), but neither of them have the built-in functionality or ease of use that TestInfra has. TestInfra is certainly lacking too, but given the Python ecosystem it's far easier (for me) to extend and write the tests that _actually matter_ and boring enough that I don't have to reconsider the tool of choice for every component I write. I have come to rely on failing tests to ensure long-term maintenance of my components, especially for Ansible roles.
+- [Trivy](https://aquasecurity.github.io/trivy/): Like TFSec below, trivy is my boring choice for detecting vulnerabilities in artifacts. Together with TestInfra, I have adopted a pattern of adding provisioners to Packer templates to run these two checks on images, to break the build in the case that they fail. Trivy has a database of vulnerabilities which is reliable enough for me to automate the decision of whether to release something, and checks almost everthing I need to say with high certainty that a given artifact is safe for use in production.
+- [Conventional Commits](https://conventionalcommits.org): Effectively communicating changes is important to future me and anyone who may need to maintain the component. Conventional commits is my boring first choice when it comes to selecting a vocabulary for describing changes.
+- [commitlint](https://commitlint.js.org/#/): Nobody's perfect, and I probably have a place in that particular hall of fame, so I need something to catch me when I make typos in commit messages. Commitlint runs as a pre-commit hook to check my commit messages and ensure that they conform to the conventional commit spec.
+- [Semantic Versioning](https://semver.org/spec/v2.0.0.html): Reliably and consistently releasing artifacts makes it possible to continuously deploy them using declarative infrastructure. A common approach is to consume a `latest` tag of an artifact (such as a repository or container image), but making atomic changes to deployments becomes impossible to track. Furthermore, it becomes difficult to reliably roll back to a known working state, making deployments risky and thus susceptible to slowing down,  forcing manual intervention and requiring human cognition. Versioning artifacts is perhaps one of the most impactful boring practices I have come to adopt, and semantic versioning is my boring choice for implementing it.
+- [Semantic Release](https://semantic-release.gitbook.io/semantic-release/): If SemVer is boring enough for deciding _what_ version to assign to artifacts based on changes in the commit history, Semantic Release is my boring choice for **actually creating** the release artifacts.
+- [pre-commit](https://pre-commit.com): Charity starts at home and clean consistent, working code starts before you commit it. The pre-commit framework is my boring choice for running sanity checks on changes before I commit and push them to the repository. Apart from the commit message check done by commitlint, other recurring stars in my pre-commit configuration include
+  - [detect-secrets](https://github.com/Yelp/detect-secrets): ensures that sensitive data is not accidentally committed to the repository.
+  - [Ansible Lint](https://ansible-lint.readthedocs.io/en/latest/): helps me ensure that roles and playbooks are written in a standardised way to respect basic levels of quality. Linting not only catches basic errors, but also helps to stay aligned with a given style guide, which greatly improves the maintainability of Ansible components.
+  - [Terraform format](https://www.terraform.io/cli/commands/fmt) and [validate](https://www.terraform.io/cli/commands/validate) are no-brainers, in fact the formatting of Terraform code is usually done by the IDE itself, and having a pre-commit hook which validates Terraform code ensures that incomplete work is not committed.
+  - [Terraform Docs](https://terraform-docs.io/): Ain't nobody got time for writing docs, especially in a consistent format and style. Snark aside though, I wish there were a similar tool for Ansible. Yes, I know there are some contenders, but none of the ones I've tried provide a similarly smooth experience.
+  - [TFSec](https://aquasecurity.github.io/tfsec) and [KICS](https://github.com/Checkmarx/kics)
+
+That's a pretty big list so far!
+There are other tricks I've learned for specific tools, but that is probably a story for another day.
+For now, I conclude my brief interlude describing the boring, invisible, but crucial bits of what I do at work.
+
+-----
+
+I used digital ocean quite a bit during this post, and as mentioned above, I found it quite useful for the purposes.
+Go ahead and get some free credits with my referral link below.
+
+[![DigitalOcean Referral Badge](https://web-platforms.sfo2.digitaloceanspaces.com/WWW/Badge%202.svg)](https://www.digitalocean.com/?refcode=ed3b69c0eec6&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
