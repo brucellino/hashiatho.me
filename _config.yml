@@ -3,6 +3,7 @@ title: >-
   Hashi @
   Home
 email: brucellino@hey.com
+permalink: pretty
 description: >-
   Sharp tools, sharp mind. The story of using Hashicorp tools in a home-made setup
 baseurl: "" # the subpath of your site, e.g. /blog
