@@ -78,9 +78,9 @@ This is taking advantage of the platform to provide higher functions in the plat
 
 ## What to monitor -- prometheus configuration
 
-Prometheus exposes data via the exporters
-We can enable the simplest of exporters, the [node exporter](https://github.com/prometheus/node_exporter), and start scraping that.
-Then, we
+Prometheus exposes data via exporters.
+We can enable the simplest of exporters, the [node exporter](https://github.com/prometheus/node_exporter), and start scraping that for metrics related to the operating system and hardware of the computeatoms.
+This would involve having a prometheus exporter started and running on
 
 ### Hashi At Home stack
 
@@ -89,7 +89,101 @@ Since we can assume that we are deploying prometheus into an _existing_ Consul c
 Hashicorp products provide good built-in telemetry options:
 
 - Vault telemetry is [configurable](https://www.vaultproject.io/docs/configuration/telemetry) via a server stanza. However, in order to monitor Vault we need a token which can be used to access the metrics endpoint.
-- Consul
+- Consul is [instrumented](https://www.consul.io/docs/agent/telemetry) and can be monitored by Prometheus
 - Nomad has a very [comprehensive monitoring guide](https://www.nomadproject.io/docs/operations/monitoring-nomad) which includes suggestions on alerting and service level indicators.
 
-<!--  -->
+So, all of the layers of the platform are instrumented and expose their metrics via a Prometheus interface.
+The next steps is therefore to configure prometheus to scrape these metrics and make the data available to something for visualisation.
+More on that later.
+
+### Consul service discovery
+
+Apart from the layers of the actual Hashi@Home stack, we also want to monitor the services deployed _on_ the platform.
+If these are registered with Consul, we should be able to use the [Consul service discovery](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#consul_sd_config) configuration.
+Since the prometheus job will be running in the Consul datacenter, it will have access to the Consul DNS service, so we can point the `consul_sd_configs.server` to `consul.service.consul:8500`.
+
+Furthermore, the instance metrics can be scraped by asking the Consul catalog where all the nodes are, using a template expression like:
+
+{% highlight golang %}
+{% raw %}
+scrape_configs:
+
+- job_name: 'instance_metrics'
+      static_configs:
+        - targets:
+            {{ range nodes }}
+              - {{ .Address}}:9100
+            {{ end }}
+{% endraw %}
+{% endhighlight %}
+
+## Deploying prometheus
+
+Now that we have a gameplan for monitoring the infrastructure and stack, we can write a deployment.
+This is the fourth iteration in our level-crossing strange loop referred to above.
+The prometheus service will take the form of a [Nomad job](https://github.com/brucellino/nomad-jobs/blob/main/prometheus.nomad) to deploy the job[^1.0.0].
+
+The job defines the prometheus artifact which is retrieved from the prometheus releases page, and a configuration file provided via a template:
+
+{% highlight yaml %}
+{% raw %}
+---
+
+global:
+  scrape_interval:     20s
+  evaluation_interval: 60s
+
+scrape_configs:
+
+- job_name: 'instance_metrics'
+    static_configs:
+  - targets:
+          {{ range nodes }}
+    - {{ .Address}}:9100
+          {{ end }}
+- job_name: 'consul_metrics'
+    consul_sd_configs:
+  - server: consul.service.consul:8500
+        services:
+          {{ range services }}
+    - {{ .Name }}
+          {{ end }}
+    relabel_configs:
+  - source_labels: [__meta_consul_tags]
+        separator: ;
+        regex: (._)http(._)
+        replacement: $1
+        action: keep
+  - source_labels: [__meta_consul_address]
+        separator: ;
+        regex: (.*)
+        target_label: __meta_consul_service_address
+        replacement: $1
+        action: replace
+    scrape_interval: 5s
+    metrics_path: /v1/metrics
+    params:
+      format: ['prometheus']
+{% endraw %}
+{% endhighlight %}
+
+This template includes only two scrape jobs:
+
+1. instance metrics via `static_configs`
+1. consul metrics via `consul_sd_configs`
+
+We rely on the consul catalog in two ways here.
+In the first case, we use it to provide is a list of endpoints by requesting the nodes in the catalog.
+This allows us to have a dynamically generated list of static targets, which sounds like a paradox but isn't.
+In the second case, we use the Consul service catalog to scrape the metrics of the services which are registered in the catalog.
+
+Taking a moment to reflect, this seems a bit like magic.
+This configuration seems unrealistically simple.
+The amount of information required is very small; we need to know the consul endpoint... and that's it?
+
+This prometheus job gets deployed into an environment it knows nothing about, and Consul tells it everything it needs to know about what to monitor, where the endpoints are, _etc_.
+
+Consider this mind blown.
+
+---
+[^1.0.0]: This was first added to the Nomad job repository in [v1.0.0](https://github.com/brucellino/nomad-jobs/releases/tag/v1.0.0).
