@@ -12,3 +12,5 @@
   icon: ansible.svg
 - name: raspberry-pi
   icon: raspberry-pi.svg
+- name: packer
+  icon: packer.svg
