@@ -44,6 +44,8 @@ There's no API for "eject from my laptop and transfer into the pi across the roo
 "Starting an instance" means actually booting off a microSD card with a machine the size of a credit card.
 There are no racks or robots here!
 
+The key point is that the image should have the bare minimum knowledge in order to join the Consul cluster without the operator having to do anything.
+
 ## A Hashi image is a happy image
 
 The raspberry pi imager is really a great piece of software.
@@ -73,13 +75,23 @@ Nice. I can't see the end of the road yet, but the way seems fairly clear.
 
 ### Land gracefully
 
-I need computatoms to join the **Consul datacenter** when they boot, not just the network!
+I need computatoms to join the **Consul datacenter** when they boot, not just the network.
 This implies of course that they already have Consul installed, and have the information necessary to configure themselves when they start up.
 I would like to approach an autoscaling parallel where new instances automatically join the cluster and are available for work -- without leaving secrets on the image.
 Of course, zero trust isn't _absolute_ zero trust!
-I will need to figure out some way to have the consul agent be authorized to join the cluster when it comes up, perhaps via some provisioning of a Vault token using an AppRole.
 What I can say for certain is that I will need to provision the Vault Agent, Consul template and Consul itself as a bare minimum.
 Configuration should be as dynamic as possible, with less reliance on configuration files and more reliance on the templating features that Consul startup arguments offer.
+
+### Authenticating the _machine_
+
+In a zero trust world, authorisation is based on the identity of the entity, so in order for the Vault agent to authenticate, it needs some form of _identification_.
+
+In the past we could have assumed that since a machine was on a local network, it should have implicit access to all the required secrets and sensitive data, but we know that in a cloud native environment making this kind of assumption often leads to failure.
+We cannot assume that the network will be trusted, or even that it will be _that particular network_!
+
+In order to authenticate the machine then, we need to issue it some kind of credential, without persisting secrets on the image.
+Luckily, Vault has just what we need, in the form of the "pull" method[AppRole](https://www.vaultproject.io/docs/auth/approle).
+Issueing a Role ID to an instance and allowing it to retrieved a wrapped token, we are able to securely provision files templated with the sensitive data we need -- Consul gossip key and CA certificates -- to agents when they start.
 
 ### Storage Configuration
 
@@ -90,6 +102,13 @@ Well, we don't have disks but we still need to provide it with a filesystem moun
 
 The raspi-imager doesn't provide this luxury.
 It formats the entire disk to include all of the space available, whereas I want to leave a few GB for other partitions.
+
+## Watch this space
+
+Work has started on all this fun stuff over at the [Ansible role for Consul](https://github.com/brucellino/ansible-role-consul) repository.
+In the next few weeks, I should have a writeup of how to provision perfectly configured, zero-trust, zero-touch images with Packer for bare-metal raspberry-pi deployment.
+
+Stay tuned!
 
 ---
 [^yet]: I mean... not _yet_. I can imagine how this kind of thing would be possible by netbooting or mounting a remote store for first boot. Alas, Hashi@Home is not there yet.
