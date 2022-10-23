@@ -2,7 +2,7 @@
 layout: post
 title: Emergence from the void
 date: 2022-10-22 09:00 +0100
-headline: A closer look at introducing computatoms to Hashi@Home
+headline: How can one create something from nothing?
 categories:
   - blog
 tags:
@@ -87,13 +87,22 @@ When we have already generated the "Vault" function, but completing one circuit 
 
 ## Thinking clearly
 
+Many of the ideas here come to you mangled by my re-interpretation of them from their originators.
+The idea of genesis from the void is perhaps as old as human consciousness, so an innumerable amount of references could be made to previous thinkers.
+I make absolutely attempt to place myself amongst the likes of Plato! However, ideas are free to use, and I claim it as my right as a member of the human race.
+More modern and scientific formulations of emergence have been made reference to here in the works of Douglas Hofstadter and Terrence Deacon, via their works:
+
+- [**"Incomplete Nature: How Mind Emerged from Matter"**, Terrence W. Deacon (2012) ISBN 0393049914](https://anthropology.berkeley.edu/incomplete-nature-how-mind-emerged-matter)
+- [**"I am a Strange Loop"**, Douglas Hofstadter (2007) ISBN 0465030785](https://archive.org/details/iamstrangeloop0000hofs)
+
 Forgive this brief excursion into the realm of the meta, dear reader.
 Hashi@Home is not just a tool for learning how to use my favourite products to learn how to Cloud Native things on a budget, it is also an opportunity to reflect on mysteries and paradoxes... in a word, to _think_.
-Understanding requires reflection and interrogation of one's true comprehension of the little pictures we draw, indeed the more primitive symbols that they represent in our minds.
+Understanding requires reflection and critical interrogation of one's true comprehension of the little pictures we draw, and of the the more primitive symbols which represent them in our minds.
 
 I hope that this is not a sterile exercise in analysis, but rather something which can help me to reason more clearly about the _way_ in which we design and deliver services, thinking from the point of view of the _human operator_.
 
----
+## Footnotes and References
+
 [^StrangeLoop]: I am referring to _my_ flawed interpretation of what Hofstadter calls a [Strange Loop](https://en.wikipedia.org/wiki/Strange_loop). The book "I am a Strange Loop", as well as the concept of "_autogenesis_" or ["_abiogenesis_"](https://en.wikipedia.org/wiki/Abiogenesis) which I read about for the first time in Terrence Deacon's book [Incomplete Nature](https://en.wikipedia.org/wiki/Incomplete_Nature#Autogenesis.)
 [^NotThatWay]: I don't mean "self-aware" in the way that a conscious being is aware of itself, but rather the system has a means of asking questions about itself, it has a means to perform actions on itself, _etc_. It is a slippery concept, so bare with me.
 [^AI]: If anyone is aware of something which corresponds to such a definition, please tell me about it!
