@@ -90,7 +90,7 @@ In the past we could have assumed that since a machine was on a local network, i
 We cannot assume that the network will be trusted, or even that it will be _that particular network_!
 
 In order to authenticate the machine then, we need to issue it some kind of credential, without persisting secrets on the image.
-Luckily, Vault has just what we need, in the form of the "pull" method[AppRole](https://www.vaultproject.io/docs/auth/approle).
+Luckily, Vault has just what we need, in the form of the "pull" method [AppRole](https://www.vaultproject.io/docs/auth/approle).
 Issueing a Role ID to an instance and allowing it to retrieved a wrapped token, we are able to securely provision files templated with the sensitive data we need -- Consul gossip key and CA certificates -- to agents when they start.
 
 ### Storage Configuration
