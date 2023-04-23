@@ -5,3 +5,22 @@ _site
 
 # Editor mess
 .vscode
+
+# binary image formats
+assets/img/terraform*.gif
+assets/img/terraform*.png
+assets/img/consul*.gif
+assets/img/consul*.png
+assets/img/vagrant*.gif
+assets/img/vagrant*.png
+assets/img/packer*.gif
+assets/img/packer*.png
+assets/img/nomad*.gif
+assets/img/nomad*.png
+assets/img/hashi*.gif
+assets/img/hashi*.png
+assets/img/vault*.gif
+assets/img/vault*.png
+
+# personal dictionary
+.cspell
