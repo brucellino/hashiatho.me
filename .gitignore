@@ -24,3 +24,6 @@ assets/img/vault*.png
 
 # personal dictionary
 .cspell
+
+# staged k6 binary
+.github/**/k6

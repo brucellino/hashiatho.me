@@ -1,25 +1,28 @@
-# This is a basic workflow to help you get started with Actions
-
+---
 name: Release
-
-# Controls when the action will run.
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+    branches:
+      - main
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  k6-load-test:
+    name: Load Test
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run k6
+        uses: grafana/k6-action@v0.2.0
+        with:
+          filename: .github/workflows/test.js
 
+  release:
+    runs-on: ubuntu-latest
+    needs:
+      - k6-load-test
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
