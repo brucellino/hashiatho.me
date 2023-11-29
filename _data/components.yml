@@ -14,3 +14,7 @@
   icon: raspberry-pi.svg
 - name: packer
   icon: packer.svg
+- name: tailscale
+  icon: tailscale.svg
+- name: cloudflare
+  icon: cloudflare.svg
