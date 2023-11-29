@@ -11,7 +11,7 @@ tags:
 ---
 
 <figure class="figure">
-  <img src="{{ site.url }}/assets/img/test-all-the-things.jpg" width="33%">
+  <img src="{{ site_assets }}/assets/img/test-all-the-things.jpg" width="33%">
 </figure>
 
 ## Test ALL THE THINGS
@@ -27,7 +27,7 @@ If the build breaks, the proposal is no good -- but no worries, the robots will 
 ---
 
 <figure class="figure">
-  <img src="{{ site.url }}/assets/img/sad-test-all-the-things.jpg" width="33%">
+  <img src="{{ site_assets }}/assets/img/sad-all-the-things.jpg" width="33%">
 </figure>
 
 ## Test all the things
@@ -244,6 +244,8 @@ I could use the [dispatch API](https://developer.hashicorp.com/nomad/api-docs/jo
 This is where our hero met his first call to adventure[^heros].
 Yes, I could find some way to expose my Nomad API to the internet, but I really didn't want to do that.
 If there were some way that I could protect that endpoint to authenticate and allow only valid messages from GitHub, then I could build something which executed the right workflow to create runners on demand only when they are needed.
+
+Stay tuned...
 
 ---
 
