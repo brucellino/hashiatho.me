@@ -32,7 +32,7 @@ kramdown:
     block:
       line_numbers: true
       start_line: 1
-theme_color: solarized
+# theme_color: solarized
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
 # to override the default setting.
@@ -44,5 +44,6 @@ exclude:
   - vendor/cache/
   - vendor/gems/
   - vendor/ruby/
+  - .trunk
 plugins:
   - jekyll-paginate
