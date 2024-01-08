@@ -15,6 +15,7 @@ mermaid: true
 ## What do I want from my runners
 
 In the [previous post]({{ page.previous.url }}), I considered using Hashi@Home as a place to run [Self-Hosted GitHub runners](https://docs.github.com/en/actions/hosting-your-own-runners).
+In this article, I wanted to go into detail about how I actually went about designing and implementing a solution[^goal]
 
 Before discussing problems to address, perhaps it's better to spend a few words describing how I would like my environment to _behave_ when I'm done.
 
@@ -144,13 +145,28 @@ With a Cloudflare account, I can use the [Developer Platform](https://developers
 * create a [tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) deploy it into the Nomad cluster at home.
 * protect the tunnel with [access policies](https://developers.cloudflare.com/cloudflare-one/policies/access/) requiring a [service token](https://developers.cloudflare.com/cloudflare-one/identity/service-tokens/)
 
-This will safely solve the problem 2 above, ensuring that webhook payloads are delivered to an endpoint which authenticates them
+This will safely solve the problem 2 above, ensuring that webhook payloads are delivered to an endpoint which authenticates them and triggers a function which, based on some business logic, dispatches the job to start the runner, passing the relevant data from the payload to the Nomad Dispatch API endpoint.
+
+Below is a schematic diagram of the flow of events:
 
 <pre class="mermaid">
 ---
-title: runners workflow
+title: Github Runners on Demand Workflow, showing Github Actions, Repo triggers, Cloudflare and Nomad (in Hashi@Home)
 flowchartConfig:
   width: 100%
+config:
+  theme: base
+  themeVariables:
+    background: "#d8dee9"
+    fontFamily: "Roboto Mono"
+    primaryColor: "#88c0d0"
+    secondaryColor: "#81a1c1"
+    tertiaryColor: "#ebcb8b"
+    primaryTextColor: "#2e3440"
+    secondaryTextColor: "#3b4252"
+    primaryBorderColor: "#7C0000"
+    lineColor: "#F8B229"
+    fontSize: "20px"
 ---
 flowchart TB
   commit(Commit)
@@ -177,7 +193,7 @@ flowchart TB
   subgraph Webhooks
     direction TB
     repo-- Emit -->webhook
-    subgraph Cloudflare["fa:fa-cloudflare"]
+    subgraph Cloudflare["fab:fa-cloudflare"]
       direction LR
       webhook-- POST -->listener
       listener-- Route -->cf_app
@@ -203,32 +219,61 @@ flowchart TB
   end
 </pre>
 
+So, technically we have solved the problem 🎉 all we have to do now is implement it 🤔.
+Time to break out the ol' toolbox 🧰!
 
-## Architecture
+## Implementation
 
+This section deals with the technical implementation of the solution to the problem described above.
+In this case, I'm implementing it myself, but often implementations are a team effort, with several engineers collaborating to create and integrate several parts.
+
+### Architecture
+
+The first thing you need is agreement on the architecture of the thing you're building, often referred to as a _model_.
+Representing architecture as a diagram makes it a bit easier for the team to know who is responsible for what, and how the pieces integrate.
+However, if we adhere to the old adage that "a picture is worth a thousand words", we risk losing much of rigour we gain with code by representing models as diagrams.
+Pictures may be interpreted differently by different people, or lack a means to express precise details of how parts are supposed to be built.
+What is more, a given architecture will be deployed differently in different environments.
+
+You also don't want to overwhelm whoever is reading the design with irrelevant details of parts that don't concern them, so actually a _hierarchical_ visualisation of the architecture would be the best thing.
+
+We're going to use the [C4 model](https://c4model.com/) to visualise how the workflow shown above is implemented.
+This is a four-level hierarchy showing just enough detail at each level to be able to collaborate effectively, and is becoming widely-used as of the time of writing.
+
+Below we have a [container diagram](https://c4model.com/#ContainerDiagram)
 <div class="mermaid">
 ---
 config:
-  theme: forest
-  c4:
-    curve: basis
+  theme: base
+  themeVariables:
+    background: "#d8dee9"
+    fontFamily: "Roboto Mono"
+    primaryColor: "#88c0d0"
+    secondaryColor: "#81a1c1"
+    tertiaryColor: "#ebcb8b"
+    primaryTextColor: "#2e3440"
+    secondaryTextColor: "#3b4252"
+    primaryBorderColor: "#7C0000"
+    lineColor: "#F8B229"
+    fontSize: "20px"
 ---
 
-C4Dynamic
-  title "Dynamic Diagram for Zero-Scale runner"
+C4Container
+  title "C4 Container Diagram for Zero-Scale runner"
 
   Person(user, User, "A user of the repository")
 
   Container_Boundary(cloudflare, "Cloudflare", "Cloudflare developer platform") {
-    Component(zta, "Zero Trust", "Access control mechanism<br>for authorising connections")
-    Component(rbac, "RBAC", "Role-based access controls<br>for expressing access policies")
+    Component(zta, "Zero Trust", "", "Access control<br>mechanism for<br>authorising connections")
+    Component(rbac, "RBAC", "", "Role-based access<br>controls for<br>expressing access<br>policies")
     Component(worker, "Worker", "NodeJS", "Cloudflare worker")
-    Component(kv, "KV", "Cloudflare Worker <br>KV store")
+    Component(kv, "KV", "", "Cloudflare Worker <br>KV store")
     Component(domain, "Domain", "DNS", "Resolveable domain <br>on which to expose services")
+    Component(tunnel, "Tunnel", "", "Cloudflare Access Tunnel")
   }
 
   Container_Boundary(github, "Github", "SCM Platform") {
-    Component(repo, "Repository", "Git", "Hosts and tracks changes<br>to source code")
+    Component(repo, "Repository", "Git", "Hosts and tracks<br>changes to source code")
     Component(webhook, "Webhook", "REST", "Delivers payload based<br>on predefined triggers")
     Component(actions, "Actions", "REST", "CI/CD Workflows<br>as defined in repo")
   }
@@ -237,25 +282,85 @@ C4Dynamic
     Component(nomadServer,"Nomad API", "REST", "Nomad endpoint")
     Component(nomadJob, "Nomad Runner<br>Parametrised Job", "bash", "Nomad job to run<br>runner registration<br>and execution script")
     Component(nomadExec, "Nomad", "Nomad Driver", "Nomad Task<br>Executor")
+    Component(tunnelConnector, "Tunnel Connector", "cloudflared", "Cloudflare tunnel<br> connector")
   }
+
+  Rel(user,             repo,         "Pushes Code")
+  Rel(repo,             webhook,      "Triggers webhook delivery")
+  Rel(repo,             actions,      "Trigger workflow job")
+  Rel(repo,             domain,       "Delivers Payload")
+  Rel(rbac,             zta,          "Define Policy")
+  Rel(nomadServer       tunnelConnector, "Run")
+  Rel(tunnelConnector,  tunnel,       "Expose")
+  Rel(worker,           kv,           "Lookup Data")
+  Rel(domain,           worker,       "Triggers")
+  Rel(worker,           nomadServer,  "Dispatch payload")
+  Rel(nomadServer,      nomadJob,     "Trigger job")
+  Rel(nomadServer,      nomadExec,    "Provision job runtime")
+  Rel(nomadExec,        actions,      "Register runner")
 </div>
 
-<!-- Rel(user,repo, "Pushes Code")
-  Rel(repo, webhook, "Triggers webhook delivery")
-  Rel(repo, actions, "Trigger workflow job")
-  Rel(repo,domain, "Delivers Payload")
-  Rel(rbac,zta, "Define Policy")
-  Rel_Back(domain,zta, "Authorizes")
-  Rel(worker, kv, "Lookup Data")
-  Rel(domain, worker, "Triggers") -->
+This diagram shows the architecture up to the component level as well as the container boundaries for the software systems we will need to work with[^c4terms] [^notGreat].
 
+For an actual deployment, let's create a more detailed diagram:
+
+<div class="mermaid">
 ---
+config:
+  theme: base
+  themeVariables:
+    background: "#d8dee9"
+    fontFamily: "Roboto Mono"
+    primaryColor: "#88c0d0"
+    secondaryColor: "#81a1c1"
+    tertiaryColor: "#ebcb8b"
+    primaryTextColor: "#2e3440"
+    secondaryTextColor: "#3b4252"
+    primaryBorderColor: "#7C0000"
+    lineColor: "#F8B229"
+    fontSize: "20px"
+---
+C4Deployment
+title Deployment diagram for Zero-Scale Github Runner on Demand
+
+Deployment_Node(github, "Github", "GitHub") {
+  Deployment_Node(repo, "repo", "git", "Contains source code") {
+    Container(webhook, "webhook", "REST", "Sends Webhook payload")
+    Container(action, "Actions", "Github Actions", "Triggers Actions workflows")
+  }
+}
+
+Deployment_Node(cloudflare, "Cloudflare", "Cloudflare Account") {
+  Deployment_Node(dns, "DNS", "Domain Name System") {
+    Container(dns_name, "DNS record", "DNS")
+  }
+  Deployment_Node(cloudflare_one", "Cloudflare One", "Cloudflare access control") {
+    Container(application, "Cloudflare Access Application", "Nomad", "Self-Hosted Cloudflare Access Application")
+    Container(access_policy, "Cloudflare Access Policy", "Nomad", "Policy rules for allowing access to the Nomad application")
+    Container(cloudflare_tunnel, "Cloudflare Tunnel", "", "")
+  }
+  Deployment_Node(workers, "Workers", "V8", "Cloudflare Workers") {
+    Container(worker_script, "Worker Script", "TypeScript", "Cloudflare worker script<br>to handle incoming webhook payloads")
+  }
+}
+
+Deployment_Node(hah, "Hashi@Home", "Hashi@Home Services") {
+    Container(nomad_server, "Nomad Server", "Member of Nomad Server Raft consensus")
+  Deployment_Node(nomad_cluster, "Nomad Cluster", "Nomad Cluster") {
+    Container(tunnel_connector, "Tunnel Connector", "Nomad Job")
+  }
+}
+</div>
+
 
 ## References and Footnotes
 
+[^goal]: The goal here was more than just having a working solution. I used a few new tools which I wanted to practice, including [mermaidjs](https://mermaid.js.org) for the diagrams in this article, the [c4 model](https://c4model.com/) for representing architecture, as well as the actually technical services in Cloudflare, Nomad and Github.
 [^GithubWebhooks]: See [the Github docs](https://docs.github.com/en/webhooks) for a full description of Github Webhooks.
 [^workflow_job_payload]: See [Webhook payload object for `workflow_job`](https://docs.github.com/en/webhooks/webhook-events-and-payloads#workflow_job)
 [^whyCloudFlare]: The reasons for this basically came down to: I already have an account, I can do it for free, I wanted to learn the Cloudflare One zero trust mechanism.
 [^noAffiliation]: I have no affiliation with Cloudflare other than the same consumer agreement along with all the other shmoes. I pays my money, I gets the goods.
 [^domain]: I chose the `brucellino.dev` domain because reasons.
 [^cloudflare_developer_platform]: The combination of all of these services was really the main reason that I chose the platform. For more information on Cloudflare products see [the docs](https://developers.cloudflare.com/)
+[^c4terms]: _Container_, _Component_ and _Software System_ here are C4 terms.
+[^notGreat]: The diagrams here were made with mermaidJS. If I'm being brutally honest, the C4 implementation is not great. Granted, it's still not fully implemented, but if someone had to give me this picture, I'd be more confused than I started out.
