@@ -340,18 +340,62 @@ Deployment_Node(cloudflare, "Cloudflare", "Cloudflare Account") {
     Container(cloudflare_tunnel, "Cloudflare Tunnel", "", "")
   }
   Deployment_Node(workers, "Workers", "V8", "Cloudflare Workers") {
-    Container(worker_script, "Worker Script", "TypeScript", "Cloudflare worker script<br>to handle incoming webhook payloads")
+    Container(worker_script, "Worker Script", "TypeScript", "Cloudflare worker script<br>to handle incoming<br>webhook payloads")
   }
 }
 
 Deployment_Node(hah, "Hashi@Home", "Hashi@Home Services") {
-    Container(nomad_server, "Nomad Server", "Member of Nomad Server Raft consensus")
-  Deployment_Node(nomad_cluster, "Nomad Cluster", "Nomad Cluster") {
-    Container(tunnel_connector, "Tunnel Connector", "Nomad Job")
+    Container(nomad_server, "Nomad Server", "Member of<br>Nomad Server<br>Raft consensus", "Provides Nomad API")
+  Deployment_Node(nomad_cluster, "Nomad Cluster", "Nomad Cluster", "Nomad execution<br>Environment") {
+    Container(tunnel_connector, "Tunnel Connector", "Nomad Job", "Provides<br>connectivity to<br>Cloudflare Edge")
+    Container(parametrised_runner, "Parametrised Runner", "Parametrised<br>Nomad Job", "Templated Nomad<br>Job which can be<br>instantiated.")
+    Container(runner_instance, "Runner Instance", "Dispatched<br>Nomad Job", "Specific instance<br>of Github Runner<br>with relevant payload")
   }
+
+  Rel(webhook, dns_name, "Look up endpoint", "HTTPS")
+  Rel(dns_name, application, "Route payload<br>to Edge<br>application", "")
+  Rel(application, worker_script, "Invoke<br>worker script", "")
+  Rel(worker_script, parametrised_runner, "Dispatch with payload", "HTTPS")
+
+  Rel(tunnel_connector, cloudflare_tunnel, "Expose", "cloudflared")
+  Rel(parametrised_runner, runner_instance, "Execute", "Nomad Agent")
 }
 </div>
 
+I leave it to the reader to decide which of these diagrams is the more enlightening.
+
+### Deployment
+
+Now it comes time finally to implement the solution as code.
+This was done with Terraform[^nosurprises], by using the Github, Cloudflare, Nomad and other providers to create the relevant resources.
+
+I will go into the implementation perhaps in  a later post, but for the curious take a look at the [Terraform module repo](https://github.com/brucellino/terraform-github-nomad-webhooks).
+
+This module essentially creates the functional parts (github webhooks, cloudflare tunnel, cloudflare worker, nomad job), as well as the access policies necessary to protect the tunnel and allow access only to authorised calls.
+
+With a `terraform apply`  we deploy it all and wait for webhooks to send data from Github to start runners.
+
+## Results
+
+With the solution deployed, we can see that there are webhooks registered[^webhooks] on all my personal repos, registered to trigger for specific events.
+For example:
+
+{% highlight none %}
+Request URL: https://github_webhook.brucellino.dev
+Request method: POST
+Accept: */*
+Content-Type: application/json
+User-Agent: GitHub-Hookshot/f09667f
+X-GitHub-Delivery: 7a410360-ac7b-11ee-915d-61f3c222f3d9
+X-GitHub-Event: workflow_job
+X-GitHub-Hook-ID: 444544179
+X-GitHub-Hook-Installation-Target-ID: 175939748
+X-GitHub-Hook-Installation-Target-Type: repository
+X-Hub-Signature: sha1=36b4f3433c470a6bacfc6f2e87a53908cc84f0fc
+X-Hub-Signature-256: sha256=af8b8f7ca85340ee76a26a87d91ceb7e01b06e4ae84b57b1c2ef8bd69efabd2f
+{% endhighlight %}
+
+Here we can see what the target is indeed `repository`, solving the issue we had before of having to register large amounts of runners persistently, and the payload signature `X-Hub-Signature` which is verified in the worker before being decoded and passed on to the Cloudflare application connected to the Cloudflare tunnel exposing the Nomad API.
 
 ## References and Footnotes
 
@@ -364,3 +408,5 @@ Deployment_Node(hah, "Hashi@Home", "Hashi@Home Services") {
 [^cloudflare_developer_platform]: The combination of all of these services was really the main reason that I chose the platform. For more information on Cloudflare products see [the docs](https://developers.cloudflare.com/)
 [^c4terms]: _Container_, _Component_ and _Software System_ here are C4 terms.
 [^notGreat]: The diagrams here were made with mermaidJS. If I'm being brutally honest, the C4 implementation is not great. Granted, it's still not fully implemented, but if someone had to give me this picture, I'd be more confused than I started out.
+[^nosurprises]: This was built in 2023 when nobody would have been surprised to hear that a platform service was implemented with Terraform. We'll see what 2024 has in store and perhaps the golden path here will deviate.
+[^webhooks]: These are registered with a `:webhook_id` and can be seen at a given `:repo` : _e.g._ `https://github.com/<username>/:repo/settings/hook/:webhook_id`
