@@ -8,15 +8,6 @@ repos:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
-  - repo: https://github.com/jumanjihouse/pre-commit-hooks
-    rev: 2.1.5
-    hooks:
-      - id: bundler-audit
-      - id: markdownlint
-  - repo: https://github.com/pre-commit/mirrors-scss-lint
-    rev: v0.59.0
-    hooks:
-      - id: scss-lint
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
     rev: v5.0.0
     hooks:

@@ -6,10 +6,12 @@ pre {
   overflow-x: auto;
   padding-left: 16px;
   width: (9 / 12 * 100%); // matches col-9
+  max-width: '100%';
 }
 
 code {
-  color: $burnt-sienna;
+  // color: $burnt-sienna;
+  // cpolor: $nord11
   font-family: $mono-font-family;
   font-size: 1.2em;
   padding: 1px 0;
@@ -120,7 +122,7 @@ code {
     }
 
     tr {
-      background-color: $white;
+      // background-color: $white;
       border-bottom: 2px solid $color-body-text;
       border-top: 1px solid $color-body-text;
     }

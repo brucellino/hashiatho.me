@@ -1,6 +1,4 @@
-/**
-  * Reset some basic elements
-*/
+// Reset some basic elements
 
 * {
  box-sizing: border-box !important;
@@ -51,7 +49,7 @@ figure img {
   width: 75%;
   border-radius: 5;
   border-width: 2;
-  border-color: $persian-green;
+  // border-color: $persian-green;
 }
 
 figcaption {
