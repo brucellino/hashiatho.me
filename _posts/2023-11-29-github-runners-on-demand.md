@@ -397,6 +397,85 @@ X-Hub-Signature-256: sha256=af8b8f7ca85340ee76a26a87d91ceb7e01b06e4ae84b57b1c2ef
 
 Here we can see what the target is indeed `repository`, solving the issue we had before of having to register large amounts of runners persistently, and the payload signature `X-Hub-Signature` which is verified in the worker before being decoded and passed on to the Cloudflare application connected to the Cloudflare tunnel exposing the Nomad API.
 
+When the payload hits the Cloudflare Worker it is verified, and if the event matches the right condition, a request is sent to the the Nomad endpoint:
+
+{% highlight javascript %}
+const dispatch = {
+  method: "POST",
+  headers: {
+    "Authorization":  "Bearer " + nomad_acl_token,
+    "Content-Type": "application/json;charset=UTF-8",
+    "CF-Access-Client-Id": access_client_id,
+    "CF-Access-Client-Secret": access_client_secret,
+  },
+  body: JSON.stringify({
+    Payload: data,
+    Meta: {
+      REPO_FULL_NAME: payload.repository.full_name,
+      REPO_SHORT_NAME: payload.repository.name,
+      WORKFLOW_RUN: (payload.workflow_job.run_id).toString()
+    },
+  }),
+};
+{% endhighlight %}
+
+Here, the `access_client_id` and `access_client_secret` are registered as secrets in the Cloudflare worker, so that we can [authenticate](https://developers.cloudflare.com/cloudflare-one/identity/service-tokens/#connect-your-service-to-access) the worker to the Cloudflare Access tunnel.
+
+The payload is the [base64 encoded payload](https://developer.hashicorp.com/nomad/api-docs/jobs#payload) sent to the Nomad dispatch endpoint:
+{% highlight javascript %}
+const data = btoa(
+  JSON.stringify({
+    repo: payload.repository.full_name,
+    fork: payload.repository.fork,
+    job: payload.workflow_job.name,
+    run_id: payload.workflow_job.run_id
+  })
+);
+{% endhighlight %}
+
+Also included is a body with a `Meta` key which provides us with variables which we can pass to the job, using the [Nomad runtime](https://developer.hashicorp.com/nomad/docs/runtime/environment)
+
+## Discussion
+
+For now you'll have to trust me, dear reader, that this whole shebang works.
+There's a new post coming soon going into depth on the implementation
+I hope I've tickled your fancy, but I must confess that my goal here was not just to write a story about how I managed to run Github Actions at home.
+
+### Communicating design across the technical boundary
+
+Designing and describing the architecture of a solution, and then implementing it are usually done by different people in a professional context.
+The former is done by a solutions architect, the latter by an engineer; it is quite rare that one has the luxury of being able to design _and_ implement a solution in the actual workplace[^requirements_gathering].
+
+This leaves the door open to misinterpretation and fuzziness about what is actually _meant_ by a given diagram or description, creating at best a level of frustration and at worst a bunch of finger-pointing when things go wrong.
+It's probably just another way that "DevOps" was supposed to save us, only in this case we've moved up the maturity path all the way to the design phase.
+
+I've heard a bit about how the C4 model is supposed to be able to communicate effectively across technical boundaries and wanted to give it a real try in a nontrivial scenario I have control over.
+
+### _Everything_ as code?
+
+The second muscle I wanted to exercise was the diagrams as code.
+Like any engineer affine role, I've drawn a few diagrams in my day, and I've usually tried hard -- especially when I needed to communicate something via them to **someone else** -- to adopt good [design principles](https://data.europa.eu/apps/data-visualisation-guide/tag/design-principles).
+This often means applying consistent styling to diagrams, which can be very time consuming.
+What is more, there are often different audiences which need to be told the story in the diagram, and they will be interested in different details.
+
+The quality and correctness of these diagrams is of the utmost importance so the ability to separate the content from the view makes it possible to significantly reduce the amount of work that needs to be done to produce consistent visualisations.
+This ability is afforded by writing the diagrams in a "source code" and then "compiling" them into a given visualisation using an appropriate tool.
+This is generally referred to as _diagrams as code_, and first appeared on the [Thoughtworks Technology Radar in 2021](https://www.thoughtworks.com/radar/techniques/diagrams-as-code):
+
+> ... There are benefits to using these tools over the heavier alternatives, including easy version control and the ability to generate the DSLs from many sources...
+>- [Thoughtworks Technology Radar (2020/2021)](https://www.thoughtworks.com/radar/techniques/diagrams-as-code)
+
+I wanted something that I could embed in this very document, so that the diagram was _part of the document_, which led me to use MermaidJS.
+A similar approach would have been to use [diagrams.net](https://diagrams.mingrammer.com/) in a Jupyter notebook... but this is a Jekyll blog so, nah.
+
+The diagrams generated by Mermaid, especially the C4 diagrams, are subpar, but I must admit that having the diagram _readable_ in the source code and _readable_ in the docs, and actually in the same place, is quite convincing.
+When written as code, what it loses in expressiveness, the diagram is _explicit_ and _semantically precise_.
+I am looking forward to seeing how far I can push this with Asciidoctor and Structurizr, and comparing it with what (spoiler alert) can be done with Terraform graph.
+
+### Reducing rework
+
+Taken individually, this may seem like sterile navel gazing, but if we can keep the design, code and docs in a single place, and communicate effectively to the target audience, I have a suspicion that this will help significantly in getting things done right the first time, without resorting to interminable meetings and begrudging rework.
+
 ## References and Footnotes
 
 [^goal]: The goal here was more than just having a working solution. I used a few new tools which I wanted to practice, including [mermaidjs](https://mermaid.js.org) for the diagrams in this article, the [c4 model](https://c4model.com/) for representing architecture, as well as the actually technical services in Cloudflare, Nomad and Github.
@@ -410,3 +489,4 @@ Here we can see what the target is indeed `repository`, solving the issue we had
 [^notGreat]: The diagrams here were made with mermaidJS. If I'm being brutally honest, the C4 implementation is not great. Granted, it's still not fully implemented, but if someone had to give me this picture, I'd be more confused than I started out.
 [^nosurprises]: This was built in 2023 when nobody would have been surprised to hear that a platform service was implemented with Terraform. We'll see what 2024 has in store and perhaps the golden path here will deviate.
 [^webhooks]: These are registered with a `:webhook_id` and can be seen at a given `:repo` : _e.g._ `https://github.com/<username>/:repo/settings/hook/:webhook_id`
+[^requirements_gathering]: Not to mention the feature requirements gathering -- this is why I included the user stories in the article.
