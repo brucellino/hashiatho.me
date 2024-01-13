@@ -2,7 +2,7 @@
 layout: post
 title: Terraform all the things
 date: 2023-11-20 07:00 +0100
-headline: What you need, when you need it.
+headline: Putting it all together - Terraforming Github runners on Nomad and Cloudflare.
 categories:
   - blog
 tags:
