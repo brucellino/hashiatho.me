@@ -16,6 +16,8 @@ mermaid: true
 
 ## The problem
 
+In this post, we go into detail about how I wrote the actual Terraform for implementing the solution we discussed before.
+
 Remember this from last time?
 
 {% include diagrams/github-runners-cloudflare-diagram.html %}
