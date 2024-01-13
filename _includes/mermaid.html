@@ -1,9 +1,19 @@
+{% comment %}
 <script src="https://unpkg.com/mermaid@10.6.1/dist/mermaid.min.js"></script>
+{% endcomment %}
 <script>
   $(document).ready(function () {
     mermaid.initialize({
       startOnLoad:true,
       theme: "default",
+      fontSize: "28px",
+      sequence: {
+        actorFontSize: "28",
+        actorFontFamily: "IBM Plex Mono",
+        messageFontSize: "28",
+        messageFontFamily: "IBM Plex Mono",
+        showSequenceNumbers: false,
+      }
     });
     window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
   });

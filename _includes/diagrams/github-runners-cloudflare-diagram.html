@@ -1,0 +1,69 @@
+<pre class="mermaid">
+---
+title: Github Runners on Demand Workflow, showing Github Actions, Repo triggers, Cloudflare and Nomad (in Hashi@Home)
+flowchartConfig:
+  width: 100%
+config:
+  theme: base
+  themeVariables:
+    background: "#d8dee9"
+    fontFamily: "Roboto Mono"
+    primaryColor: "#88c0d0"
+    secondaryColor: "#81a1c1"
+    tertiaryColor: "#ebcb8b"
+    primaryTextColor: "#2e3440"
+    secondaryTextColor: "#3b4252"
+    primaryBorderColor: "#7C0000"
+    lineColor: "#F8B229"
+    fontSize: "20px"
+---
+flowchart TB
+  commit(Commit)
+  repo(Git Repo)
+  webhook(Repo Webhook)
+  action_workflow(Github Action workflow)
+  action_job(Github Action job)
+  runner(Github Self-Hosted runner)
+  listener(Webhook receiver)
+  worker([Cloudflare Worker])
+  tunnel(Cloudflare tunnel)
+  cf_app(Cloudflare Application)
+  nomad_job(Nomad Parametrized job)
+  nomad(Nomad Dispatch API)
+
+  %% triggers %%
+  subgraph Triggers["fa:fa-github Triggers"]
+    direction LR
+    commit-- Push update to -->repo
+    commit-- Trigger -->action_workflow
+  end
+
+  %% webhook flow %%
+  subgraph Webhooks
+    direction TB
+    repo-- Emit -->webhook
+    subgraph Cloudflare["fab:fa-cloudflare"]
+      direction LR
+      webhook-- POST -->listener
+      listener-- Route -->cf_app
+      zta-- Protect -->cf_app
+      cf_app-- Invoke -->worker
+      worker-- POST -->tunnel
+    end
+
+    subgraph Nomad
+      direction LR
+      tunnel-- Expose -->nomad
+      nomad-- Schedule -->nomad_job
+      nomad_job-- Instantiates -->runner
+    end
+  end
+
+  %% actions flow %%
+  subgraph Actions["fa:fa-github Actions"]
+    action_workflow-- Schedules -->action_job
+    action_job-- Requests -->runner
+    runner-- Executes -->action_job
+    action_job-- Notifies Status -->commit
+  end
+</pre>

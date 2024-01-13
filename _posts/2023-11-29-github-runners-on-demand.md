@@ -474,7 +474,7 @@ I am looking forward to seeing how far I can push this with Asciidoctor and Stru
 
 ### Reducing rework
 
-Taken individually, this may seem like sterile navel gazing, but if we can keep the design, code and docs in a single place, and communicate effectively to the target audience, I have a suspicion that this will help significantly in getting things done right the first time, without resorting to interminable meetings and begrudging rework.
+Taken individually, this may seem like sterile navel gazing, but if we can keep the design, code and docs in a single place, and communicate effectively to the target audience, I have a suspicion that this will help significantly in getting things done right the first time, without resorting to interminable meetings and begrudging rework
 
 ## References and Footnotes
 
