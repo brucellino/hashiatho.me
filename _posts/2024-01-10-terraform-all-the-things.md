@@ -241,7 +241,7 @@ Now that the providers are configured, we can go about creating all of the resou
 
 You know what I really don't like?
 Those "tutorials"  that start off really explicit and simple, you follow them nodding your head going  "yeah, ok, I get it, I can do this"  and then somewhere around step 3 it pulls a magic trick with a wave of the hand and out pops a fully-formed masterpiece that you have no idea how to make.
-That's not what I'm trying to do here, so let's take a step back and try to reason about the [rest of the damn owl](https://www.reddit.com/r/restofthefuckingowl/)[^Rest-of-the-damn-owl].
+That's not what I'm trying to do here, so let's take a step back and try to reason about the [rest of the damn owl](https://www.reddit.com/r/restofthefuckingowl/)[^rest_of_the_damn_owl].
 
 #### Github
 
@@ -560,7 +560,7 @@ And sometimes owning your own things is better than subscribing to other peoples
 ## References and footnotes
 
 [^NomadVaultSecret]: I actually want a short-lived token from for Nomad from the Vault Nomad secrets mount, but I haven't gotten that to work yet. I also want some form of short-lived token for Vault, but full-disclosure, I'm using a root token at home 😱.
-[^rest-of-the-damn-owl]: I'm referring to the things that the ["How to draw an owl"](https://knowyourmeme.com/memes/how-to-draw-an-owl) meme refers to.
+[^rest_of_the_damn_owl]: I'm referring to the things that the ["How to draw an owl"](https://knowyourmeme.com/memes/how-to-draw-an-owl) meme refers to.
 [^cidr_filter]: It would be best to expose the worker _only_ to known Github Actions endpoints. Github actually [does expose their IP ranges](https://docs.github.com/en/rest/meta/meta?apiVersion=2022-11-28#get-github-meta-information) and the provider [implements a `data` source for it](https://registry.terraform.io/providers/integrations/github/latest/docs/data-sources/ip_ranges). However Cloudflare access rules [can only be specified as /16 or /24 at the moment](https://community.cloudflare.com/t/ip-access-rule-api-error-cidr-range-firewallaccessrules-api-validation-error-invalid-ip-provided/399939) which means having to convert the /23 and other CIDRs that Github returns to expand to those sizes. Honestly, it felt like I'd have to do a hack and I leave that for next time.
 [^mac]: This is a crucial part of security of the setup -- without it, I could send any old data through the worker and do very malicious things to my Nomad cluster. I followed the [official guide](https://docs.github.com/en/webhooks/using-webhooks/validating-webhook-deliveries#validating-webhook-deliveries) to implement the function in [Javascript](https://docs.github.com/en/webhooks/using-webhooks/validating-webhook-deliveries#javascript-example) when implementing the worker.
 [^not-quite-terraformable]: This resource is not quite terraformable yet.
