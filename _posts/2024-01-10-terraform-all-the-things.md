@@ -16,6 +16,8 @@ mermaid: true
 
 ## The problem
 
+Remember this from last time?
+
 {% include diagrams/github-runners-cloudflare-diagram.html %}
 
 The flow of data is easier to visualise perhaps as a sequence diagram:
