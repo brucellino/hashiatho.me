@@ -14,6 +14,6 @@ source 'https://rubygems.org'
 # uncomment the line below. To upgrade, run `bundle update github-pages`.
 # gem 'github-pages', group: :jekyll_plugins
 
-gem 'github-pages', '~> 229'
+gem 'github-pages', '~> 230'
 
 gem "webrick", "~> 1.8"
