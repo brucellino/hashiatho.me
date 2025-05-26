@@ -221,7 +221,7 @@ There's lots to learn and improve upon here!
 ## Scheduling the backups
 
 Whether it's by Ansible or by Go, I still need a way to actually _execute_ the backup procedure.
-One choice might be to have a systemd timer running somewhere, but I what if I can't guarantee that that particular computatom is available at the scheduled time?
+One choice might be to have a systemd timer running somewhere, but what if I can't guarantee that that particular computatom is available at the scheduled time?
 A better approach would be to take advantage of a distributed scheduler, for example Nomad itself!
 
 We could define a [periodic batch](https://developer.hashicorp.com/nomad/docs/schedulers#batch) job to place and execute the procedure.
