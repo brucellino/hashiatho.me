@@ -189,7 +189,7 @@ Maybe we could make something a bit more stand-alone and smaller?
 ### Go application implementation
 
 This consideration led me to implementing the workflow via a standalone application instead of via a framework like Ansible.
-I ruled out Python for the same reason I ruled out Ansible: I would have to pull, in a python runtime and dependencies which would be essentially the same as first approach.
+I ruled out Python for the same reason I ruled out Ansible: I would have to pull in a python runtime and dependencies which would be essentially the same as first approach.
 However, I suspected that I could write a standalone executable for arbitrary environments with Go.
 
 Here is an analysis of where I stand regarding pros and cons for the Go implementation:
@@ -208,7 +208,7 @@ It's only a few HTTP calls after all!
 The performance is also more or less guaranteed to better because it's a single binary, but also because of Go's built-in [concurrency](https://go.dev/wiki/LearnConcurrency).
 
 While I can show the implementation in Ansible because I have already finished it and was using it in "production" (lol), the Go implementation is still a work in progress.
-Given the pros and cons above, I consider it a more elegant approach for long-term use, since as an operator, it could expose control functions[^control_functions] and [^telemetry] as HTTP paths, whereas the Ansible implementation is a batch execution plain and simple.
+Given the pros and cons above, I consider it a more elegant approach for long-term use, since as an operator, it could expose control functions[^control_functions] and telemetry[^telemetry] as HTTP paths, whereas the Ansible implementation is a batch execution plain and simple.
 
 ### Better use of APIs
 
