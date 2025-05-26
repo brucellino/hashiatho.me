@@ -6,6 +6,7 @@ headline: Averting disaster.
 categories:
   - blog
 tags:
+  - vault
   - nomad
   - consul
   - terraform
