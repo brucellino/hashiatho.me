@@ -10,10 +10,9 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://hashiatho.me" # the base hostname & protocol for your site, e.g. http://example.com
 paginate: 1
 paginate_path: "posts/:num"
-paginate_tag_basepath: '/tag/:name'
+paginate_tag_basepath: "/tag/:name"
 
-twitter_username: brusisceddu
-github_username:  brucellino
+github_username: brucellino
 highlighter: rouge
 # Build settings
 markdown: kramdown
@@ -25,7 +24,8 @@ kramdown:
   toc_levels: 1..4
   syntax_highlighter_opts:
     # Rouge Options › https://github.com/jneen/rouge#full-options
-    css_class: 'highlight'
+    css_class: "highlight"
+
     #line_numbers: true # bad idea, spans don't need linenos and would inherit this option
     span:
       line_numbers: false
