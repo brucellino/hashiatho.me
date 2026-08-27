@@ -1,0 +1,47 @@
+---
+title: >-
+  Hashi @
+  Home
+email: brucellino@hey.com
+permalink: pretty
+description: >-
+  Sharp tools, sharp mind. The story of using Hashicorp tools in a home-made setup
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "http://localhost:4000" # the base hostname & protocol for your site, e.g. http://example.com
+paginate: 5
+paginate_path: "page:num"
+paginate_tag_basepath: "/tag/:name"
+
+github_username: brucellino
+highlighter: rouge
+# Build settings
+markdown: kramdown
+repository: brucellino/hashiatho.me
+kramdown:
+  syntax_highlighter: rouge
+  input: GFM
+  auto_ids: true
+  toc_levels: 1..4
+  syntax_highlighter_opts:
+    # Rouge Options › https://github.com/jneen/rouge#full-options
+    css_class: "highlight"
+    #line_numbers: true # bad idea, spans don't need linenos and would inherit this option
+    span:
+      line_numbers: false
+    block:
+      line_numbers: true
+      start_line: 1
+theme_color: solarized
+# Exclude from processing.
+# The following items will not be processed, by default. Create a custom list
+# to override the default setting.
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+plugins:
+  - jekyll-paginate
