@@ -1,3 +1,19 @@
 [tools]
 ruby = "3.2.2"
 prek = "0.4.3"
+
+[tasks.'bundle:install']
+description = "Install gem dependencies"
+run = "bundle install"
+
+[tasks.doctor]
+description = "Check Jekyll configuration and source"
+run = "jekyll doctor"
+
+[tasks.serve-dev]
+description = "Serve the development server"
+run = "jekyll serve -w --config _config.dev.yml"
+
+[tasks.serve-prod]
+description = "Serve the production server"
+run = "bundle exec jeykyll serve -w --config _config.yml"
