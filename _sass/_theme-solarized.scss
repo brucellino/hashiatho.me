@@ -1,42 +1,39 @@
 // solarized theme
+// Import sass partials (used in all themes)
+@use "variables" as *;
+@use "base";
+@use "components";
+@use "utilities";
+@use "badges";
 
 // Color variables
-$white: #fbfefb;
-$charcoal: #264653;
-$persian-green: #2A9D8F;
-$yellow-crayola: #E9C46A;
-$sandy-brown: #F4A261;
-$burnt-sienna: #E76F51;
-$light-grey: #CED4DA;
-$slate: #6C757D;
-// Config
-$color-background: $charcoal !default;
-$color-dot-accent: $burnt-sienna !default;
-$color-foreground: $persian-green !default;
-$color-title: $white !default;
-$color-body-text: $charcoal !default;
-$color-text-accent: $burnt-sienna !default;
-$color-code: $charcoal !default;
-$color-nav-link: $sandy-brown !default;
-$color-primary-link: $yellow-crayola !default;
+// $white: #fbfefb;
+// $charcoal: #264653;
+// $persian-green: #2A9D8F;
+// $yellow-crayola: #E9C46A;
+// $sandy-brown: #F4A261;
+// $burnt-sienna: #E76F51;
+// $light-grey: #CED4DA;
+// $slate: #6C757D;
+// // Config
+// $color-background: $charcoal !default;
+// $color-dot-accent: $burnt-sienna !default;
+// $color-foreground: $persian-green !default;
+// $color-title: $white !default;
+// $color-body-text: $charcoal !default;
+// $color-text-accent: $burnt-sienna !default;
+// $color-code: $charcoal !default;
+// $color-nav-link: $sandy-brown !default;
+// $color-primary-link: $yellow-crayola !default;
 
-$primary-color: $charcoal !default;
-$primary-color-light: lighten($primary-color, 15%) !default;
-$primary-color-dark: darken($primary-color, 15%) !default;
+// $primary-color: $charcoal !default;
+// $primary-color-light: lighten($primary-color, 15%) !default;
+// $primary-color-dark: darken($primary-color, 15%) !default;
 
-$secondary-color: $persian-green !default;
-$success-color: $persian-green !default;
-$error-color: $burnt-sienna !default;
-$link-color: $yellow-crayola !default;
-$collection-line-height: 1.5rem !default;
-$sidenav-item-height: 48px !default;
-$sidenav-line-height: $sidenav-item-height !default;
-
-// Import sass partials (used in all themes)
-@import
-        "variables",
-        "base",
-        "components",
-        "utilities",
-        "badges"
-;
+// $secondary-color: $persian-green !default;
+// $success-color: $persian-green !default;
+// $error-color: $burnt-sienna !default;
+// $link-color: $yellow-crayola !default;
+// $collection-line-height: 1.5rem !default;
+// $sidenav-item-height: 48px !default;
+// $sidenav-line-height: $sidenav-item-height !default;

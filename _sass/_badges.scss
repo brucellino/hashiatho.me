@@ -1,3 +1,6 @@
+@use 'sass:color';
+@use "variables" as *;
+
 $badge-bg-color: $secondary-color !default;
 $badge-height: 22px !default;
 
@@ -10,7 +13,7 @@ span.badge {
   font-size: 1rem;
   line-height: $badge-height;
   height: $badge-height;
-  color: color('grey', 'darken-1');
+  color: $slate; // color: #808080;
   float: right;
   box-sizing: border-box;
 
@@ -21,6 +24,7 @@ span.badge {
     background-color: $badge-bg-color;
     border-radius: 2px;
   }
+
   &.new:after {
     content: " new";
   }
@@ -44,9 +48,11 @@ nav ul a span.badge {
 .collection-item span.badge {
   margin-top: calc(#{$collection-line-height / 2} - #{$badge-height / 2});
 }
+
 .collapsible span.badge {
   margin-left: auto;
 }
+
 .sidenav span.badge {
   margin-top: calc(#{$sidenav-line-height / 2} - #{$badge-height / 2});
 }
