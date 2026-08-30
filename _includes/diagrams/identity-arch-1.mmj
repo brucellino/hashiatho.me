@@ -1,0 +1,48 @@
+---
+  config:
+    look: neo
+    theme: base
+    themeVariables:
+      background: "#d8dee9"
+      fontFamily: "Roboto Mono"
+      primaryColor: "#88c0d0"
+      secondaryColor: "#81a1c1"
+      tertiaryColor: "#ebcb8b"
+      primaryTextColor: "#2e3440"
+      secondaryTextColor: "#3b4252"
+      primaryBorderColor: "#7C0000"
+      lineColor: "#F8B229"
+      fontSize: "20px"
+      NEW_C4_STYLE: true
+
+---
+C4Context
+  title Platform Identity and Authorisation system
+
+  Boundary(org, "Organisation") {
+    Person(platformUser, "Platform user")
+    System(IdP, "Identity Provider")
+    Rel(platformUser, Service, "Access")
+    BiRel(Service, AAI, "Request Access Permissions")
+    BiRel(AAI, IdP, "Request
+  Credentials")
+  }
+
+  Boundary(platform, "Platform Services") {
+    Person(platformOperator, "Platform Operator")
+    Person(platformOwner, "Platform Owner")
+    System(Service, "Platform Service")
+    System(AAI, "Authentication and Authorisation Service")
+
+  }
+
+
+
+  Rel(Service, platformUser, "Authorise")
+  Rel(platformOwner, AAI, "Define access policies and permissions")
+  Rel(platformOperator, Service, "Deploy and Configure")
+
+  %% UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="1")
+  %% UpdateRelStyle(platformUser, Service, $offsetX="20")
+  %% UpdateRelStyle(Service, platformUser, $offsetX="-20")
+  %% UpdateRelStyle(AAI, IdP, $offsetY="50")
