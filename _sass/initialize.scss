@@ -1,3 +1,4 @@
+@use "variables" as *;
 @charset "utf-8";
 
 // defaults for each variable.
@@ -120,195 +121,313 @@ $table-border-color: $border-color-01 !default;
   .c {
     color: #998;
     font-style: italic;
-  } // Comment
+  }
+
+  // Comment
   .err {
     color: #a61717;
     background-color: #e3d2d2;
-  } // Error
+  }
+
+  // Error
   .k {
     font-weight: bold;
-  } // Keyword
+  }
+
+  // Keyword
   .o {
     font-weight: bold;
-  } // Operator
+  }
+
+  // Operator
   .cm {
     color: #998;
     font-style: italic;
-  } // Comment.Multiline
+  }
+
+  // Comment.Multiline
   .cp {
     color: #999;
     font-weight: bold;
-  } // Comment.Preproc
+  }
+
+  // Comment.Preproc
   .c1 {
     color: #998;
     font-style: italic;
-  } // Comment.Single
+  }
+
+  // Comment.Single
   .cs {
     color: #999;
     font-weight: bold;
     font-style: italic;
-  } // Comment.Special
+  }
+
+  // Comment.Special
   .gd {
     color: #000;
     background-color: #fdd;
-  } // Generic.Deleted
+  }
+
+  // Generic.Deleted
   .gd .x {
     color: #000;
     background-color: #faa;
-  } // Generic.Deleted.Specific
+  }
+
+  // Generic.Deleted.Specific
   .ge {
     font-style: italic;
-  } // Generic.Emph
+  }
+
+  // Generic.Emph
   .gr {
     color: #a00;
-  } // Generic.Error
+  }
+
+  // Generic.Error
   .gh {
     color: #999;
-  } // Generic.Heading
+  }
+
+  // Generic.Heading
   .gi {
     color: #000;
     background-color: #dfd;
-  } // Generic.Inserted
+  }
+
+  // Generic.Inserted
   .gi .x {
     color: #000;
     background-color: #afa;
-  } // Generic.Inserted.Specific
+  }
+
+  // Generic.Inserted.Specific
   .go {
     color: #888;
-  } // Generic.Output
+  }
+
+  // Generic.Output
   .gp {
     color: #555;
-  } // Generic.Prompt
+  }
+
+  // Generic.Prompt
   .gs {
     font-weight: bold;
-  } // Generic.Strong
+  }
+
+  // Generic.Strong
   .gu {
     color: #aaa;
-  } // Generic.Subheading
+  }
+
+  // Generic.Subheading
   .gt {
     color: #a00;
-  } // Generic.Traceback
+  }
+
+  // Generic.Traceback
   .kc {
     font-weight: bold;
-  } // Keyword.Constant
+  }
+
+  // Keyword.Constant
   .kd {
     font-weight: bold;
-  } // Keyword.Declaration
+  }
+
+  // Keyword.Declaration
   .kp {
     font-weight: bold;
-  } // Keyword.Pseudo
+  }
+
+  // Keyword.Pseudo
   .kr {
     font-weight: bold;
-  } // Keyword.Reserved
+  }
+
+  // Keyword.Reserved
   .kt {
     color: #458;
     font-weight: bold;
-  } // Keyword.Type
+  }
+
+  // Keyword.Type
   .m {
     color: #099;
-  } // Literal.Number
+  }
+
+  // Literal.Number
   .s {
     color: #d14;
-  } // Literal.String
+  }
+
+  // Literal.String
   .na {
     color: #008080;
-  } // Name.Attribute
+  }
+
+  // Name.Attribute
   .nb {
     color: #0086b3;
-  } // Name.Builtin
+  }
+
+  // Name.Builtin
   .nc {
     color: #458;
     font-weight: bold;
-  } // Name.Class
+  }
+
+  // Name.Class
   .no {
     color: #008080;
-  } // Name.Constant
+  }
+
+  // Name.Constant
   .ni {
     color: #800080;
-  } // Name.Entity
+  }
+
+  // Name.Entity
   .ne {
     color: #900;
     font-weight: bold;
-  } // Name.Exception
+  }
+
+  // Name.Exception
   .nf {
     color: #900;
     font-weight: bold;
-  } // Name.Function
+  }
+
+  // Name.Function
   .nn {
     color: #555;
-  } // Name.Namespace
+  }
+
+  // Name.Namespace
   .nt {
     color: #000080;
-  } // Name.Tag
+  }
+
+  // Name.Tag
   .nv {
     color: #008080;
-  } // Name.Variable
+  }
+
+  // Name.Variable
   .ow {
     font-weight: bold;
-  } // Operator.Word
+  }
+
+  // Operator.Word
   .w {
     color: #bbb;
-  } // Text.Whitespace
+  }
+
+  // Text.Whitespace
   .mf {
     color: #099;
-  } // Literal.Number.Float
+  }
+
+  // Literal.Number.Float
   .mh {
     color: #099;
-  } // Literal.Number.Hex
+  }
+
+  // Literal.Number.Hex
   .mi {
     color: #099;
-  } // Literal.Number.Integer
+  }
+
+  // Literal.Number.Integer
   .mo {
     color: #099;
-  } // Literal.Number.Oct
+  }
+
+  // Literal.Number.Oct
   .sb {
     color: #d14;
-  } // Literal.String.Backtick
+  }
+
+  // Literal.String.Backtick
   .sc {
     color: #d14;
-  } // Literal.String.Char
+  }
+
+  // Literal.String.Char
   .sd {
     color: #d14;
-  } // Literal.String.Doc
+  }
+
+  // Literal.String.Doc
   .s2 {
     color: #d14;
-  } // Literal.String.Double
+  }
+
+  // Literal.String.Double
   .se {
     color: #d14;
-  } // Literal.String.Escape
+  }
+
+  // Literal.String.Escape
   .sh {
     color: #d14;
-  } // Literal.String.Heredoc
+  }
+
+  // Literal.String.Heredoc
   .si {
     color: #d14;
-  } // Literal.String.Interpol
+  }
+
+  // Literal.String.Interpol
   .sx {
     color: #d14;
-  } // Literal.String.Other
+  }
+
+  // Literal.String.Other
   .sr {
     color: #009926;
-  } // Literal.String.Regex
+  }
+
+  // Literal.String.Regex
   .s1 {
     color: #d14;
-  } // Literal.String.Single
+  }
+
+  // Literal.String.Single
   .ss {
     color: #990073;
-  } // Literal.String.Symbol
+  }
+
+  // Literal.String.Symbol
   .bp {
     color: #999;
-  } // Name.Builtin.Pseudo
+  }
+
+  // Name.Builtin.Pseudo
   .vc {
     color: #008080;
-  } // Name.Variable.Class
+  }
+
+  // Name.Variable.Class
   .vg {
     color: #008080;
-  } // Name.Variable.Global
+  }
+
+  // Name.Variable.Global
   .vi {
     color: #008080;
-  } // Name.Variable.Instance
+  }
+
+  // Name.Variable.Instance
   .il {
     color: #099;
-  } // Literal.Number.Integer.Long
+  }
+
+  // Literal.Number.Integer.Long
 }
 
 /**
@@ -359,7 +478,8 @@ hr {
  * `main` element
  */
 main {
-  display: block; /* Default value of `display` of `main` element is 'inline' in IE 11. */
+  display: block;
+  /* Default value of `display` of `main` element is 'inline' in IE 11. */
 }
 
 /**
@@ -373,7 +493,7 @@ img {
 /**
  * Figures
  */
-figure > img {
+figure>img {
   display: block;
 }
 
@@ -390,8 +510,9 @@ ol {
 }
 
 li {
-  > ul,
-  > ol {
+
+  >ul,
+  >ol {
     margin-bottom: 0;
   }
 }
@@ -473,7 +594,7 @@ pre {
   padding: 8px 12px;
   overflow-x: auto;
 
-  > code {
+  >code {
     border: 0;
     padding-right: 0;
     padding-left: 0;
@@ -548,19 +669,23 @@ table {
   color: $table-text-color;
   border-collapse: collapse;
   border: 1px solid $table-border-color;
+
   tr {
     &:nth-child(even) {
       background-color: $table-zebra-color;
     }
   }
+
   th,
   td {
     padding: ($spacing-unit / 3) ($spacing-unit / 2);
   }
+
   th {
     background-color: $table-header-bg-color;
     border: 1px solid $table-header-border;
   }
+
   td {
     border: 1px solid $table-border-color;
   }
@@ -639,7 +764,7 @@ table {
     padding-top: 10px;
     text-align: center;
 
-    > svg path {
+    >svg path {
       fill: $border-color-03;
     }
   }
@@ -653,12 +778,12 @@ table {
     cursor: pointer;
   }
 
-  input ~ .trigger {
+  input~.trigger {
     clear: both;
     display: none;
   }
 
-  input:checked ~ .trigger {
+  input:checked~.trigger {
     display: block;
     padding-bottom: 5px;
   }
@@ -674,6 +799,7 @@ table {
     &:not(:last-child) {
       margin-right: 0;
     }
+
     margin-left: 20px;
 
     &,
@@ -696,7 +822,7 @@ table {
       display: none;
     }
 
-    input ~ .trigger {
+    input~.trigger {
       display: block;
     }
 
@@ -707,6 +833,7 @@ table {
       &:not(:last-child) {
         margin-right: 20px;
       }
+
       margin-left: auto;
     }
   }
@@ -847,7 +974,7 @@ table {
   margin-left: 0;
   list-style: none;
 
-  > li {
+  >li {
     margin-bottom: $spacing-unit;
     padding: 0.5em;
   }
@@ -931,6 +1058,7 @@ table {
   h3 {
     margin-top: $spacing-unit * 2;
   }
+
   h4,
   h5,
   h6 {
@@ -960,6 +1088,7 @@ table {
   h5 {
     @include relative-font-size(1.125);
   }
+
   h6 {
     @include relative-font-size(1.0625);
   }
@@ -967,15 +1096,19 @@ table {
 
 .social-media-list {
   display: table;
+
   li {
     float: left;
     margin: 5px 10px 5px 0;
+
     &:last-of-type {
       margin-right: 0;
     }
+
     a {
       display: block;
       padding: $spacing-unit / 4;
+
       &:hover {
         border-color: $border-color-02;
       }
@@ -989,13 +1122,16 @@ table {
 .pagination {
   margin-bottom: $spacing-unit;
   @extend .social-media-list;
+
   li {
+
     a,
     div {
       min-width: 41px;
       text-align: center;
       box-sizing: border-box;
     }
+
     div {
       display: block;
       padding: $spacing-unit / 4;
