@@ -51,41 +51,51 @@ We are going to call this the _"Identity Architecture_".
 
 ## Implementation of Identity Architecture
 
-<pre class="mermaid">
-{% include diagrams/identity-arch-1.mmj %}
-</pre>
+The context of the platform identity service is shown in the diagram below, where it is designated "Authentication and Authorisation Service".
 
 ```plantuml
-@startuml
 
-!include C4_Context.puml
+{% include diagrams/identity-arch-1.puml %}
 
-LAYOUT_WITH_LEGEND()
-
-title Platform Identity and Authorisation system
-
-Boundary(org, "Organisation") {
-  Person(platformUser, "Platform user", $sprite="person2")
-  System(IdP, "Identity Provider")
-}
-
-Boundary(platform, "Platform Services") {
-  Person(platformOperator, "Platform Operator")
-  Person(platformOwner, "Platform Owner")
-  System(Service, "Platform Service")
-  System(AAI, "Authentication and Authorisation Service")
-}
-
-Rel(platformUser, Service, "Access")
-BiRel(Service, AAI, "Request Access Permissions")
-BiRel(AAI, IdP, "Request Credentials")
-Rel(platformUser, IdP, "Provide Credentials")
-Rel(IdP, AAI, "Authenticate")
-Rel(Service, platformUser, "Authorise")
-Rel(platformOwner, AAI, "Define access policies and permissions")
-Rel(platformOperator, Service, "Deploy and Configure")
-@end
 ```
+
+In this context, someone wishing to access one of the Platform Services[^NotWorkloads] is redirected to the AAI, which then requests authentication of the user at their organisatin's identity provider (IdP).
+After successful authentication, the AAI looks up what the user's attributes as defined in the authorisation realm, and then passes those to the service which the user initally wanted to use.
+The service's policies then map those attributes to permissions and roles in its context, and authorises the user to access it with those same permissions and roles.
+
+This is shown in the sequence diagram below:
+
+```seqdiag
+seqdiag {
+  User -> Service [label = "Request Service"];
+  Service -> AAI [label = "Request AuthN/Z"];
+  AAI -> IdP [label = "Authenticate User"];
+  User -> IdP [label = "Provide Credentials"];
+  IdP -> AAI [label = "Return Identity"];
+  AAI -> Service [label = "Provide Attributes"];
+  User <- Service [label = "Authorise with policy"];
+}
+```
+
+As the platform owners, we need to deploy the AAI service, synonymous with "Platform Identity".
+This means we are responsible for issuing standard-based attributes to authenticated identities, so that services can decide what permissions and roles to assign to those identities.
+
+These abstract services take the following form in our platform:
+
+- Platform Identity: A [Keycloak service](https://www.keycloak.org)
+- Identity Provider: An LDAP service configured as the [Keycloak external storage provider](https://www.keycloak.org/docs/latest/server_admin/index.html#_user-storage-federation)
+
+### Identity in the Platform Engineering Context
+
+The Keycloak service will serve as the Identity service as part of the Platform Security Plane -- let's remind ourselves of the overall design as of summer 2026:
+
+<div class="figure" align="center">
+  <img src="{{ site_url }}/assets/img/EGIPlatform.png" width="70%">
+</div>
+
+
+
+
 
 ---
 
@@ -97,3 +107,4 @@ Rel(platformOperator, Service, "Deploy and Configure")
 [^many-other-downsides]: That's just _one_ of the downsides -- there are plenty others, ranging from security considerations, to operational and compliance concerns.
 [^aai]: The way I have described it here is far too simplified to be taken seriously, and mainly for my own purposes of creating a short narrative of what components we are deploying. The ecosystem comprising tools and standards to create AAI (Authentication and Authorisation Infrastructure) is far more complex, but it's not my place to go into it here.
 [^myaai]: This is an incomplete definition of AAI, solely for the purposes of this article. Good luck finding an authoritative definition of AAI, and if you do, please send it to me.
+[^NotWorkloads]: Recall that when we say "Platform Service", we are referring to services in platform planes -- the orchestrator (Nomad), the secrets engine (Vault), _etc_. These are **not** the deployed workloads, often also called "services", which are configured to use the federated AAI. In the case of EGI services, this AAI service would be Check-In.
