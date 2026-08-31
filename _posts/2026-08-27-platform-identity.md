@@ -87,15 +87,15 @@ These abstract services take the following form in our platform:
 
 ### Identity in the Platform Engineering Context
 
-The Keycloak service will serve as the Identity service as part of the Platform Security Plane -- let's remind ourselves of the overall design as of summer 2026:
+The Keycloak service will serve as the Identity service as part of the Platform Security Plane -- let's remind ourselves of the overall design as of summer 2026[^parts-missing]:
 
 <div class="figure" align="center">
-  <img src="{{ site_url }}/assets/img/EGIPlatform.png" width="70%">
+  <img src="{{ site_url }}/assets/img/platform-26-08.png" width="70%">
 </div>
 
-
-
-
+Keycloak sites in the ID management component of the Security Plane.
+The external identity store (The LDAP directory of identities) is not shown, because indeed it is not _part_ of the platform, but actually owned by the organisation which is the _customer_ of the platform.
+We attach our platform to it in order to allow the organisation to retain sovereignty over their identities.
 
 ---
 
@@ -108,3 +108,4 @@ The Keycloak service will serve as the Identity service as part of the Platform 
 [^aai]: The way I have described it here is far too simplified to be taken seriously, and mainly for my own purposes of creating a short narrative of what components we are deploying. The ecosystem comprising tools and standards to create AAI (Authentication and Authorisation Infrastructure) is far more complex, but it's not my place to go into it here.
 [^myaai]: This is an incomplete definition of AAI, solely for the purposes of this article. Good luck finding an authoritative definition of AAI, and if you do, please send it to me.
 [^NotWorkloads]: Recall that when we say "Platform Service", we are referring to services in platform planes -- the orchestrator (Nomad), the secrets engine (Vault), _etc_. These are **not** the deployed workloads, often also called "services", which are configured to use the federated AAI. In the case of EGI services, this AAI service would be Check-In.
+[^parts-missing]: As you can see, there are several parts missing. Some are missing by design (we don't advocate a single IDE, we don't have a portal, we are not interested in FinOps), while some are still waiting for proper integration (OPA as policy engine, SemGrep and Report Portal as code quality and testing). Stay tuned
