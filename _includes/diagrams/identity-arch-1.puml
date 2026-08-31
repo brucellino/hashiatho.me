@@ -1,37 +1,29 @@
 @startuml
 
 !include C4_Context.puml
-skinparam backgroundColor transparent
 
 LAYOUT_WITH_LEGEND()
 
 title Platform Identity and Authorisation system
 
-  Boundary(org, "Organisation") {
-    Person(platformUser, "Platform user")
-    System(IdP, "Identity Provider")
-    Rel(platformUser, Service, "Access")
-    BiRel(Service, AAI, "Request Access Permissions")
-    BiRel(AAI, IdP, "Request
-  Credentials")
-  }
+Boundary(org, "Organisation") {
+  Person(platformUser, "Platform user", $sprite="person2")
+  System(IdP, "Identity Provider")
+}
 
-  Boundary(platform, "Platform Services") {
-    Person(platformOperator, "Platform Operator")
-    Person(platformOwner, "Platform Owner")
-    System(Service, "Platform Service")
-    System(AAI, "Authentication and Authorisation Service")
+Boundary(platform, "Platform Services") {
+  Person(platformOperator, "Platform Operator")
+  Person(platformOwner, "Platform Owner")
+  System(Service, "Platform Service")
+  System(AAI, "Authentication and Authorisation Service")
+}
 
-  }
-
-
-
-  Rel(Service, platformUser, "Authorise")
-  Rel(platformOwner, AAI, "Define access policies and permissions")
-  Rel(platformOperator, Service, "Deploy and Configure")
-
-  %% UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="1")
-  %% UpdateRelStyle(platformUser, Service, $offsetX="20")
-  %% UpdateRelStyle(Service, platformUser, $offsetX="-20")
-  %% UpdateRelStyle(AAI, IdP, $offsetY="50")
-@enduml
+Rel(platformUser, Service, "Access")
+BiRel(Service, AAI, "Request Access Permissions")
+BiRel(AAI, IdP, "Request Credentials")
+Rel(platformUser, IdP, "Provide Credentials")
+Rel(IdP, AAI, "Authenticate")
+Rel(Service, platformUser, "Authorise")
+Rel(platformOwner, AAI, "Define access policies and permissions")
+Rel(platformOperator, Service, "Deploy and Configure")
+@end
