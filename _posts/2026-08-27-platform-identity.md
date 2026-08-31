@@ -55,6 +55,38 @@ We are going to call this the _"Identity Architecture_".
 {% include diagrams/identity-arch-1.mmj %}
 </pre>
 
+```plantuml
+@startuml
+
+!include C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Platform Identity and Authorisation system
+
+Boundary(org, "Organisation") {
+  Person(platformUser, "Platform user", $sprite="person2")
+  System(IdP, "Identity Provider")
+}
+
+Boundary(platform, "Platform Services") {
+  Person(platformOperator, "Platform Operator")
+  Person(platformOwner, "Platform Owner")
+  System(Service, "Platform Service")
+  System(AAI, "Authentication and Authorisation Service")
+}
+
+Rel(platformUser, Service, "Access")
+BiRel(Service, AAI, "Request Access Permissions")
+BiRel(AAI, IdP, "Request Credentials")
+Rel(platformUser, IdP, "Provide Credentials")
+Rel(IdP, AAI, "Authenticate")
+Rel(Service, platformUser, "Authorise")
+Rel(platformOwner, AAI, "Define access policies and permissions")
+Rel(platformOperator, Service, "Deploy and Configure")
+@end
+```
+
 ---
 
 ## Footnotes and References

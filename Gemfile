@@ -18,6 +18,7 @@ source 'https://rubygems.org'
 
 gem "webrick", "~> 1.9"
 
-gem "jekyll-kroki", "~> 1.0"
-
-gem "jekyll-paginate", "~> 1.1"
+group :jekyll_plugins do
+  gem "jekyll-kroki", "~> 1.0"
+  gem "jekyll-paginate", "~> 1.1"
+end
