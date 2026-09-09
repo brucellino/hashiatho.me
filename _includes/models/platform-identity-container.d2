@@ -1,0 +1,10 @@
+...@platform-identity
+# Suspend all shapes
+**: suspend
+# Suspend all connections
+(** -> **)[*]: suspend
+
+# Show every connection with a destination to operator
+(** -> **)[*]: unsuspend {
+  &dst: platform.security-plane.keycloak
+}

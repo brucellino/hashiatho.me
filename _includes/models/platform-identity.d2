@@ -1,0 +1,180 @@
+vars: {
+  d2-config: {
+    theme-id: 303
+    # layout-engine: tala
+    layout-engine: elk
+  }
+  d2-legend: {
+    platform: {
+      style.fill: "#FFE4E1"
+    }
+  }
+}
+
+# direction: right
+
+# customer: |md
+#   ## Platform Owner
+#   [person]
+
+# | {
+#   shape: c4-person
+#   # label.near: top-center
+# }
+
+operator: |md
+  ## Platform Operator
+  [person]
+| {
+  shape: c4-person
+  # label.near: top-center
+}
+
+# engineer: |md
+# ## Platform Engineer
+# [person]
+# | {
+#   shape: c4-person
+#   # label.near: top-center
+# }
+
+platform: |md
+  ## Platform
+
+  Internal developer platform. Contains several planes of services, designed to host customer-specified workloads.
+| {shape: rectangle}
+
+platform.security-plane: |md
+  ## Platform security plane
+
+  [Software System]
+
+  Contains services related to
+  access, authoration, security for
+  * platform services
+  * platform personae
+  * platform workloads
+| {shape: rectangle}
+
+platform.resources-plane: |md
+  ## Platform resources plane
+
+  [Software System]
+
+  Provides capacity for workloads in the platform
+
+| {shape: rectangle}
+
+platform.resources-plane.orchestrator: |md
+  ## Platform workload orchestrator
+
+  [Container: Hashicorp Nomad]
+
+  The platform workload orchestration system
+
+| {shape: rectangle}
+
+platform.resources-plane.orchestrator.compute: |md
+  ### Platform compute
+
+  [Component: Docker, Podman]
+
+  CPU and memory resources
+  available via the orchestrator
+
+| {shape: rectangle}
+
+platform.resources-plane.orchestrator.storage: |md
+  ### Platform storage
+
+  [Component]
+
+  Persistent storage and claims
+
+| {shape: rectangle}
+
+platform.security-plane.idp: |md
+  ## Platform Identity provider
+
+  [Container: OpenLDAP]
+
+  The backing service containing actual
+
+  human identity and source of truth
+
+| {shape: rectangle}
+
+platform.security-plane.idp.slapd: |md
+  OpenLDAP server
+
+  [Component]
+
+| {shape: rectangle}
+
+platform.security-plane.keycloak: |md
+  ## Authentication and Authorization
+
+  [Container: Keycloak]
+
+  Authentication and authorisation layer
+  for humans and applications.
+| {shape: rectangle}
+
+platform.security-plane.vault: |md
+  ## Secrets engine
+  [Container: Hashicorp Vault]
+
+  Platform service managing security and access for services.
+  Human authentication via OIDC
+
+| {shape: rectangle}
+
+# ## <Data plane> ###
+
+platform.data-plane: |md
+  ## Platform Data plane
+
+  Platform services supporting
+  data persistence for workloads
+| {shape: rectangle}
+
+platform.data-plane.postgres-clusters: |md
+  ## Patroni Postgres manager
+
+  [Container: Patroni Postgres]
+
+  Patroni postgres manager
+| {shape: rectangle}
+
+platform.data-plane.postgres-clusters.default: |md
+  Default postgres DB cluster
+
+  [Component: PostgreSQL]
+
+| {shape: cylinder}
+
+# ## </Data Plane>
+
+# # Relationships
+
+# LDAP needs resources
+platform.security-plane.idp -> platform.resources-plane.orchestrator.compute: Compute resources
+
+platform.security-plane.idp -> platform.resources-plane.orchestrator.storage: Persistent storage claim
+
+# Keycloak needs resources
+platform.security-plane.keycloak -> platform.resources-plane.orchestrator.compute: Compute resources
+platform.security-plane.keycloak -> platform.resources-plane.orchestrator.storage: Persistent storage claim
+# Keycloak needs DB
+platform.security-plane.keycloak -> platform.data-plane.postgres-clusters.default: State persistence DB
+
+platform.security-plane.keycloak -> platform.security-plane.idp: External identity store
+
+operator -> platform.security-plane.vault: Log In
+platform.security-plane.vault -> platform.security-plane.keycloak: Authorize
+# LDAP authenticates users
+platform.security-plane.idp -> platform.security-plane.keycloak: Authenticate
+# Keycloak passes claims to service
+platform.security-plane.keycloak -> platform.security-plane.vault: Pass attributes
+# Vault authorises
+platform.security-plane.vault -> operator: authorize
