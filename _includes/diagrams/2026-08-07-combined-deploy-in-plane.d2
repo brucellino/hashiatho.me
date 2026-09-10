@@ -1,0 +1,214 @@
+vars: {
+  d2-config: {
+    layout-engine: elk
+    theme-id: 301
+    # sketch: true
+  }
+}
+direction: up
+
+classes:{
+
+  platform-plane:  {
+    style: {
+      border-radius: 5
+      # Fill with theme color slate
+      fill: '#6C757D'
+    }
+    shape: rectangle
+  }
+
+  job: {
+    label: Nomad Job
+    style: {
+      border-radius: 5
+    }
+    shape: rectangle
+    icon: https://hashiatho.me/assets/img/nomad.svg
+    width: 15
+    height: 15
+  }
+
+  group: {
+    label: Nomad Group
+    style: {
+      border-radius: 3
+      stroke-dash: 2
+    }
+    shape: rectangle
+  }
+
+  network: {
+    label: Network
+    style: {
+      font-size: 14
+      border-radius: 1
+      stroke-dash: 3
+    }
+    shape: rectangle
+  }
+
+  compute: {
+    label: Tasks
+    style:{
+      font-size: 14
+      border-radius: 1
+      stroke-dash: 3
+    }
+  }
+
+  service: {
+    # label: Consul Service
+    icon: https://hashiatho.me/assets/img/consul.svg
+    shape: image
+    width: 15
+    height: 15
+  }
+
+  docker-task: {
+    style: {
+      font-size: 14
+    }
+    icon: https://icons.d2lang.com/dev%2Fdocker.svg
+    shape: rectangle
+    # width: 15
+    # height: 15
+  }
+
+  task-template: {
+    style: {
+      font: mono
+    }
+    shape: page
+  }
+}
+
+security-plane: |md
+### Platform Security Plane
+
+| {
+  near: center-left
+  class: platform-plane
+}
+
+
+job: |md
+  ## Nomad job -- combined deploy
+
+  Deploys LDAP and Keycloak as a single workload,
+  Orchestrated by Nomad.
+
+| {
+  near: top-center
+  class: job
+}
+
+data-plane: |md
+## Platform data plane
+
+| {
+  near: center-right
+  class: platform-plane
+}
+
+data-plane.patroni: |md
+### Patroni Postgres Manager
+
+| {
+  shape: rectangle
+}
+
+data-plane.patroni.service: default {
+  style: {
+    font-size: 14
+    font: mono
+  }
+  icon: https://hashiatho.me/assets/img/consul.svg
+}
+
+data-plane.patroni.postgres: PSQL {
+  shape: cylinder
+  style: {
+    multiple: true
+  }
+}
+
+
+security-plane.secrets: Vault {
+  shape: rectangle
+  icon: https://hashiatho.me/assets/img/vault.svg
+}
+
+data-plane.patroni.service <- data-plane.patroni.postgres: Expose
+
+# Get secrets from Vault for templates
+
+job.group {
+  class: group
+}
+
+job.group.network {
+  class: network
+}
+
+job.group.network.slapd: SLAPD {
+  class: service
+}
+
+
+job.group.network.keycloak-http: HTTP {
+  class: service
+}
+
+job.group.network.keycloak-health: Health {
+  class: service
+}
+
+job.group.task {
+  class: compute
+}
+
+job.group.task.OpenLDAP {
+  class: docker-task
+}
+# Get secrets for templates
+job.group.task.OpenLDAP.admin-config: {
+  label: Admin Configuration
+  class: task-template
+}
+job.group.task.OpenLDAP.admin-config --> security-plane.secrets: Retrieve Secrets
+
+# Get secrets for templates
+job.group.task.Keycloak.db-config: {
+  label: Configuration
+  class: task-template
+}
+
+
+job.group.task.OpenLDAP -> job.group.network.slapd: Expose
+
+job.group.task.Keycloak {
+  label: Keycloak
+  class: docker-task
+}
+
+
+job.group.task.Keycloak.db-config --> security-plane.secrets: Retrieve Secrets
+job.group.task.Keycloak -> job.group.network.keycloak-http: Expose
+job.group.task.Keycloak -> job.group.network.keycloak-health: Expose
+job.group.task.Keycloak -> data-plane.patroni.service: Lookup {
+  style: {
+    animated: true
+  }
+}
+
+# job.group.task.Keycloak.link: layers.keycloak-template
+
+# layers: {
+#   keycloak-template: |gotmpl
+# {{ range service "primary.platform-data-plane-default" }}
+# DB_ADDR="{{ .Address }}"
+# DB_PORT="{{ .Port }}"
+# {{ end }}
+# |
+# }

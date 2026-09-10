@@ -146,16 +146,23 @@ Add a component view to each of the services.
 
 Now, we need to consider deployment models and their tradeoffs.
 
-## Deployment
+## Deployment Scenarios
 
 Let's define a few hypothetical deployment scenarios.
 These can be split grosso-modo between deployments _in plane_ and _out of plane_.
-"In plane" deployments place the services in the Platform Resource Plane, meaning that the services themselves are orchestrated by the platform itself while "out of plane" deployments mean that the services are not orchestrated by the platform, but by some external controller.
+
+
+> "In plane" deployments place the services in the Platform Resource Plane, meaning that the services themselves are orchestrated by the platform itself while "out of plane" deployments mean that the services are not orchestrated by the platform, but by some external controller.
+
+
 This external controller would be something independent, bound to the deploy environment and independently managed, such as a SystemD unit on a virtual machine, or a an independent orchestrator on an external control plane.
 
-### Scenario: Combined deployment in-plane
+### Combined deployment in-plane
 
-In this scenario, we de
+In this scenario, we deploy the authentication and authorisation services as a single workload into the resource plane.
+
+This means we write a single Nomad job which contains the relevant tasks and services for both the LDAP backing service, as well as the Keycloak service.
+
 
 <!--
 identity source in database, file or other
@@ -168,6 +175,40 @@ add  custom attributes for platform.
 
 -->
 
+```d2
+
+{% include diagrams/2026-08-07-combined-deploy-in-plane.d2 %}
+
+```
+
+As can be seen in the scenario, we are dependent on the existence of a managed PostgreSQL cluster for the deployment of the Keycloak service, which will be expecting a database persistence layer for its data.
+
+#### Discussion
+
+In this scenario, we have the benefits of:
+
+1. **Single definition of workload**: we deploy everything we need with a single `nomad.hcl` file.
+1. **Network namespace sharing**: Keycloak can access the LDAP server on the local network since they share a Nomad network
+1. **Allocation filesystem sharing**: The Nomad allocation system makes available a shared filesystem for the deployment if they need to share files; each task also has access to its own private files and secrets.
+
+However, we also have the potential downsides of:
+
+1. **Resource exhaustion**: Since both keycloak and ldap are declared in a single group, they will be placed on a single node. If there are not enough resources, the orchestrator may not be able to place them. This is particularly bad if the node hosting the allocation becomes unhealthy in the cluster.
+1. **Monolithic deployment**: Somewhat linked to this negative aspect is the fact that the deployment is monolithic - it becomes difficult to independently scale each of the tasks in it. This is not a concern to us initially, but is of great importance when we start to consider production readiness.
+
+As a first step though, this is a good starting point.
+It is simple, easy to understand, self-contained, and has specific external dependencies.
+
+Just for the sake of argument, let's see what a factorised deployment would look like.
+
+### Factorised in-plane deployment
+
+
+### Out-of-plane deployment
+
+The out-of-plane deployment assumes that we have dedicated resources somewhere for these services.
+This may be conceived of as a more static deployment model, with dedicated machines in dedicated environments being allocated manually to this workload.
+The workloads (LDAP, Keycloak) and perhaps even their direct dependencies (Database backends, DNS resolvers, persistent storage claims, local filesystems, _etc_) are directly provisioned on these dedicated machines via some form of configuration management[^Ansible]
 
 ---
 
@@ -181,3 +222,4 @@ add  custom attributes for platform.
 [^myaai]: This is an incomplete definition of AAI, solely for the purposes of this article. Good luck finding an authoritative definition of AAI, and if you do, please send it to me.
 [^NotWorkloads]: Recall that when we say "Platform Service", we are referring to services in platform planes -- the orchestrator (Nomad), the secrets engine (Vault), _etc_. These are **not** the deployed workloads, often also called "services", which are configured to use the federated AAI. In the case of EGI services, this AAI service would be Check-In.
 [^parts-missing]: As you can see, there are several parts missing. Some are missing by design (we don't advocate a single IDE, we don't have a portal, we are not interested in FinOps), while some are still waiting for proper integration (OPA as policy engine, SemGrep and Report Portal as code quality and testing). Stay tuned
+[^Ansible]: I'm not coming right out to say it here, because I wanted to write this as if there were some arbitrary out-of-plane controller here, but it has become unwieldly talking around the fact that this is in all effects a set of Ansible playbooks against a set of VMs.
