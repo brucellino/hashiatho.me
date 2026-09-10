@@ -1,0 +1,147 @@
+security-plane: |md
+### Platform Security Plane
+
+| {
+  near: center-left
+  class: platform-plane
+}
+
+ldap: |md
+  ## OpenLDAP Job
+
+  LDAP workload,
+  Orchestrated by Nomad.
+
+| {
+  # near: top-center
+  class: job
+}
+
+
+keycloak: |md
+  ## Keycloak Job
+
+  Keycloak workload,
+  Orchestrated by Nomad.
+
+| {
+  # near: top-center
+  class: job
+}
+
+data-plane: |md
+## Platform data plane
+
+| {
+  near: center-right
+  class: platform-plane
+}
+
+data-plane.patroni: |md
+### Patroni Postgres Manager
+
+| {
+  shape: rectangle
+}
+
+data-plane.patroni.service: default {
+  style: {
+    font-size: 14
+    font: mono
+  }
+  icon: https://hashiatho.me/assets/img/consul.svg
+}
+
+data-plane.patroni.postgres: PSQL {
+  shape: cylinder
+  style: {
+    multiple: true
+  }
+}
+
+
+security-plane.secrets: Vault {
+  shape: rectangle
+  icon: https://hashiatho.me/assets/img/vault.svg
+}
+
+data-plane.patroni.service <- data-plane.patroni.postgres: Expose
+
+# Get secrets from Vault for templates
+ldap.group {
+  class: group
+}
+
+ldap.group.network {
+  class: network
+}
+
+ldap.group.network.slapd: SLAPD {
+  class: service
+}
+
+ldap.group.task {
+  class: compute
+}
+
+ldap.group.task.OpenLDAP {
+  class: docker-task
+}
+# Get secrets for templates
+ldap.group.task.OpenLDAP.admin-config: {
+  label: Admin Configuration
+  class: task-template
+}
+ldap.group.task.OpenLDAP.admin-config --> security-plane.secrets: Retrieve Secrets
+
+
+keycloak.group {
+  class: group
+}
+
+keycloak.group.network {
+  class: network
+}
+
+keycloak.group.network.keycloak-http: HTTP {
+  class: service
+}
+
+keycloak.group.network.keycloak-health: Health {
+  class: service
+}
+
+keycloak.group.task {
+  class: compute
+}
+
+
+# Get secrets for templates
+keycloak.group.task.Keycloak.db-config: {
+  label: Configuration
+  class: task-template
+}
+
+
+ldap.group.task.OpenLDAP -> ldap.group.network.slapd: Expose
+
+keycloak.group.task.Keycloak {
+  label: Keycloak
+  class: docker-task
+}
+
+
+keycloak.group.task.Keycloak.db-config --> security-plane.secrets: Retrieve Secrets
+keycloak.group.task.Keycloak -> keycloak.group.network.keycloak-http: Expose
+keycloak.group.task.Keycloak -> keycloak.group.network.keycloak-health: Expose
+keycloak.group.task.Keycloak -> data-plane.patroni.service: Lookup {
+  style: {
+    animated: true
+  }
+}
+
+keycloak.group.task.Keycloak -> ldap.group.network.slapd: Lookup {
+  style: {
+    animated: true
+  }
+}

@@ -1,0 +1,84 @@
+vars: {
+  d2-config: {
+    layout-engine: elk
+    theme-id: 301
+    # sketch: true
+  }
+}
+direction: up
+
+classes:{
+
+  platform-plane:  {
+    style: {
+      border-radius: 5
+      # Fill with theme color slate
+      fill: '#6C757D'
+    }
+    shape: rectangle
+  }
+
+  job: {
+    label: Nomad Job
+    style: {
+      border-radius: 5
+    }
+    shape: rectangle
+    icon: https://hashiatho.me/assets/img/nomad.svg
+    width: 15
+    height: 15
+  }
+
+  group: {
+    label: Nomad Group
+    style: {
+      border-radius: 3
+      stroke-dash: 2
+    }
+    shape: rectangle
+  }
+
+  network: {
+    label: Network
+    style: {
+      font-size: 14
+      border-radius: 1
+      stroke-dash: 3
+    }
+    shape: rectangle
+  }
+
+  compute: {
+    label: Tasks
+    style:{
+      font-size: 14
+      border-radius: 1
+      stroke-dash: 3
+    }
+  }
+
+  service: {
+    # label: Consul Service
+    icon: https://hashiatho.me/assets/img/consul.svg
+    shape: image
+    width: 15
+    height: 15
+  }
+
+  docker-task: {
+    style: {
+      font-size: 14
+    }
+    icon: https://icons.d2lang.com/dev%2Fdocker.svg
+    shape: rectangle
+    # width: 15
+    # height: 15
+  }
+
+  task-template: {
+    style: {
+      font: mono
+    }
+    shape: page
+  }
+}
