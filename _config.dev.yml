@@ -27,7 +27,7 @@ kramdown:
   syntax_highlighter: rouge
   input: GFM
   auto_ids: true
-  toc_levels: 1..4
+  toc_levels: 1..5
   syntax_highlighter_opts:
     # Rouge Options › https://github.com/jneen/rouge#full-options
     css_class: "highlight"
@@ -51,3 +51,4 @@ exclude:
   - vendor/ruby/
 plugins:
   - jekyll-paginate
+  - jekyll-toc

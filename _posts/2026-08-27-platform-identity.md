@@ -209,12 +209,51 @@ Just for the sake of argument, let's see what a factorised deployment would look
 
 ### Factorised in-plane deployment
 
+The factorised deployment differs from the combined deployment only in that there are two jobs instead of one:
+
+```d2
+
+{% include diagrams/platform-classes.d2 %}
+{% include diagrams/2026-08-07-factorised-deploy-in-plane.d2 %}
+
+```
+
+#### Discussion
+
+In this scenario, we have almost artificially constructed the reverse of the pro/con set in the previous scenario, but we have introduced a coupling with the service mesh.
+
+We can independently scale the services (Keycloak and LDAP), as well as make them independently resilient.
+
+However, Keycloak will need to have fallback and backoff configuration in case the LDAP service is not discoverable either via DNS or Consul service catalogue lookup.
+
+The failure case here would be that the the LDAP service becomes somehow unavailable, or the Keycloak server cannot connect to it, or perhaps if the template inside the task configuring the LDAP endpoint becomes stale for some reason, authentication would fail.
+
+For now, we will eschew a full-blown risk analysis, contenting ourselves with the inspiration from these two scenarios.
+
 
 ### Out-of-plane deployment
 
 The out-of-plane deployment assumes that we have dedicated resources somewhere for these services.
 This may be conceived of as a more static deployment model, with dedicated machines in dedicated environments being allocated manually to this workload.
 The workloads (LDAP, Keycloak) and perhaps even their direct dependencies (Database backends, DNS resolvers, persistent storage claims, local filesystems, _etc_) are directly provisioned on these dedicated machines via some form of configuration management[^Ansible]
+
+## Final thoughts and summary
+
+We stop short of making a decision of which scenario is "right" here, contenting ourselves with the fact that we have a few scenarios, and can discriminate on them based on what we need to achieve at the time.
+
+A full production-ready deployment must take into account not just the deployment and operation of Day1, but also the ergonomics of change after that, as well as aiming for zero touch on operations.
+
+That would require a deployment in a highly resilient and redundant environment, which we've seen mention and glimpses of, but not fully illustrated here.
+
+Supporting those deployments could also be canary deployments where we factorise not just the application servers, but also their persistence layers, migrating them between deploys as we scale up blue, then down green deployments for zero-downtime upgrades.
+
+There is still much analysis to perform, and experience to gain, but we can say at the end of this brief article that:
+
+1. We have a viable model for deploying platform identity based on the OAuth standard which we can deploy flexibly.
+2. It supports access to the platform services which our operators need to access using the OIDC Connect protocol
+3. If you already have a source of identities, such as an organisational directory, this can be modelled into the architecture and re-used.
+4. Similarly, organisational identities can be factored out from platform identities, but using the exact sample deployment model for the authorisation layer, just with different backing services.
+
 
 ---
 
