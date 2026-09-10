@@ -15,6 +15,10 @@ github_username: brucellino
 repository: brucellino/hashiatho.me
 kroki:
   url: https://kroki.io
+  http_retries: 5
+  http_timeout: 25
+  max_concurrent_docs: 8
+
 highlighter: rouge
 # Build settings
 markdown: kramdown
