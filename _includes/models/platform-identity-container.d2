@@ -1,10 +1,22 @@
-...@platform-identity
-# Suspend all shapes
-**: suspend
-# Suspend all connections
-(** -> **)[*]: suspend
 
-# Show every connection with a destination to operator
+operator -> platform.security-plane.vault: Log In
+platform.security-plane.vault -> platform.security-plane.keycloak: Authorize
+# LDAP authenticates users
+platform.security-plane.idp -> platform.security-plane.keycloak: Authenticate
+# Keycloak passes claims to service
+platform.security-plane.keycloak -> platform.security-plane.vault: Pass attributes
+# Vault authorises
+platform.security-plane.vault -> operator: authorize
+
+# Show every connection with a destination to keycloak
+**: unsuspend {
+  &level: 0
+}
+
 (** -> **)[*]: unsuspend {
   &dst: platform.security-plane.keycloak
+}
+
+(** -> **)[*]: unsuspend {
+  &dst: operator
 }
