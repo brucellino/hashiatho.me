@@ -3,6 +3,8 @@ layout: post
 title: Platform identity services
 date: 2026-08-27 10:00 +0100
 headline: Ok, but how do I log in? Keycloak as an identity broker for actual humans
+toc: true
+toc-levels: 4
 mermaid: true
 categories:
   - blog
@@ -59,6 +61,8 @@ The context of the platform identity service is shown in the diagram below, wher
 
 ```
 
+### Access: Authentication and Authorisation workflows
+
 In this context, someone wishing to access one of the Platform Services[^NotWorkloads] is redirected to the AAI, which then requests authentication of the user at their organisatin's identity provider (IdP).
 After successful authentication, the AAI looks up what the user's attributes as defined in the authorisation realm, and then passes those to the service which the user initally wanted to use.
 The service's policies then map those attributes to permissions and roles in its context, and authorises the user to access it with those same permissions and roles.
@@ -99,6 +103,8 @@ We attach our platform to it in order to allow the organisation to retain sovere
 
 Before we close the section on architecture, let's take a closer look at the Keycloak component diagram.
 
+#### Container View
+
 Consider the case where the platform operator wants to access the Vault instance:
 
 <!--```structurizr
@@ -128,7 +134,7 @@ If the user us able to provide valid identification credentials for that identit
 So far, so good -- the architecture can work.
 
 
-### Component View
+#### Component View
 
 There is more to the architecture than just the containers of the software system.
 This high-level view of the architecture does not yet reveal the dependencies in terms of platform services and flows.
