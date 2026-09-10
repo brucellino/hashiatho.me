@@ -1,13 +1,21 @@
 <div class="border-top-thin clearfix mt-2 mt-lg-4">
   <div class="container mx-auto px-2">
-    <p class="col-8 sm-width-full left py-2 mb-0">Hashi@Home is personal side-project by <a class="text-accent" href="https://github.com/{{ site.github_username }}">{{ site.github_username }}</a>. It's ok to watch, but don't touch. Get your own damn side project.</p>
+    <p class="col-8 sm-width-full left py-2 mb-0">Hashi@Home is personal side-project by <a class="text-accent"
+        href="https://github.com/{{ site.github_username }}">{{ site.github_username }}</a>. It's ok to watch, but don't
+      touch. Get your own damn side project.</p>
     <ul class="list-reset right clearfix sm-width-full py-2 mb-2 mb-lg-0">
     </ul>
   </div>
 </div>
 
-<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "d10d21ccb794430e9db594f7a7830939"}'></script><!-- End Cloudflare Web Analytics -->
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<!-- Cloudflare Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+  data-cf-beacon='{"token": "d10d21ccb794430e9db594f7a7830939"}'></script><!-- End Cloudflare Web Analytics -->
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-<script src="https://unpkg.com/mermaid@10.6.1/dist/mermaid.min.js"></script>
+<!--<script src="https://unpkg.com/mermaid@111/dist/mermaid.min.js"></script>-->
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({startOnLoad: true});
+</script>
