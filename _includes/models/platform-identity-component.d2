@@ -1,0 +1,28 @@
+# component level connections
+# Relationships
+
+# LDAP needs resources
+platform.security-plane.idp -> platform.resources-plane.orchestrator.compute: Compute resources
+
+platform.security-plane.idp -> platform.resources-plane.orchestrator.storage: Persistent storage claim
+
+# Keycloak needs resources
+platform.security-plane.keycloak -> platform.resources-plane.orchestrator.compute: Compute resources
+platform.security-plane.keycloak -> platform.resources-plane.orchestrator.storage: Persistent storage claim
+# Keycloak needs DB
+platform.security-plane.keycloak -> platform.data-plane.postgres-clusters.default: State persistence DB
+
+platform.security-plane.keycloak -> platform.security-plane.idp: External identity store
+
+**: unsuspend {
+  &class: container
+}
+
+(** -> **)[*]: unsuspend {
+}
+
+# Only show connections between root level things
+(** -> **)[*]: unsuspend {
+  &src.level: 2
+  &dst.level: 2
+}

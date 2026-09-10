@@ -93,9 +93,81 @@ The Keycloak service will serve as the Identity service as part of the Platform 
   <img src="{{ site_url }}/assets/img/platform-26-08.png" width="70%">
 </div>
 
-Keycloak sites in the ID management component of the Security Plane.
+Keycloak sits in the ID management component of the Security Plane.
 The external identity store (The LDAP directory of identities) is not shown, because indeed it is not _part_ of the platform, but actually owned by the organisation which is the _customer_ of the platform.
 We attach our platform to it in order to allow the organisation to retain sovereignty over their identities.
+
+Before we close the section on architecture, let's take a closer look at the Keycloak component diagram.
+
+Consider the case where the platform operator wants to access the Vault instance:
+
+<!--```structurizr
+
+{% include models/platform-identity.dsl %}
+
+```-->
+
+<!--
+
+Add the C4 diagram for identity, showing the software system and external services
+
+Software system is platform identity, external services are platform services.
+
+-->
+```d2
+
+{% include models/platform-identity.d2 %}
+{% include models/platform-identity-container.d2 %}
+
+```
+
+Keycloak's OIDC endpoint acts as a [Vault Authentication method](https://developer.hashicorp.com/vault/docs/auth/jwt/oidc-providers/keycloak).
+Keycloak is configured to use the LDAP external identity store as a source of truth for identities.
+If the user us able to provide valid identification credentials for that identity, Keycloak returns valid authorisation claims, and Vault authorises access to the user.
+
+So far, so good -- the architecture can work.
+
+
+### Component View
+
+There is more to the architecture than just the containers of the software system.
+This high-level view of the architecture does not yet reveal the dependencies in terms of platform services and flows.
+
+<!--
+Add a component view to each of the services.
+-->
+
+```d2
+
+{% include models/platform-identity.d2 %}
+{% include models/platform-identity-component.d2 %}
+
+```
+
+Now, we need to consider deployment models and their tradeoffs.
+
+## Deployment
+
+Let's define a few hypothetical deployment scenarios.
+These can be split grosso-modo between deployments _in plane_ and _out of plane_.
+"In plane" deployments place the services in the Platform Resource Plane, meaning that the services themselves are orchestrated by the platform itself while "out of plane" deployments mean that the services are not orchestrated by the platform, but by some external controller.
+This external controller would be something independent, bound to the deploy environment and independently managed, such as a SystemD unit on a virtual machine, or a an independent orchestrator on an external control plane.
+
+### Scenario: Combined deployment in-plane
+
+In this scenario, we de
+
+<!--
+identity source in database, file or other
+admin creds in vault
+seed consul KV
+use kv as template to openldap job
+
+openldap job contains server and replicas
+add  custom attributes for platform.
+
+-->
+
 
 ---
 

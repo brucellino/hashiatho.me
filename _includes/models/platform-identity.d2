@@ -25,10 +25,7 @@ vars: {
 operator: |md
   ## Platform Operator
   [person]
-| {
-  shape: c4-person
-  # label.near: top-center
-}
+| {shape: c4-person}
 
 # engineer: |md
 # ## Platform Engineer
@@ -42,7 +39,9 @@ platform: |md
   ## Platform
 
   Internal developer platform. Contains several planes of services, designed to host customer-specified workloads.
-| {shape: rectangle}
+| {
+  shape: rectangle
+}
 
 platform.security-plane: |md
   ## Platform security plane
@@ -54,7 +53,10 @@ platform.security-plane: |md
   * platform services
   * platform personae
   * platform workloads
-| {shape: rectangle}
+| {
+  shape: rectangle
+  class: [software-system]
+}
 
 platform.resources-plane: |md
   ## Platform resources plane
@@ -63,7 +65,10 @@ platform.resources-plane: |md
 
   Provides capacity for workloads in the platform
 
-| {shape: rectangle}
+| {
+  shape: rectangle
+  class: [software-system]
+}
 
 platform.resources-plane.orchestrator: |md
   ## Platform workload orchestrator
@@ -72,7 +77,10 @@ platform.resources-plane.orchestrator: |md
 
   The platform workload orchestration system
 
-| {shape: rectangle}
+| {
+  shape: rectangle
+  class: [container]
+}
 
 platform.resources-plane.orchestrator.compute: |md
   ### Platform compute
@@ -82,7 +90,10 @@ platform.resources-plane.orchestrator.compute: |md
   CPU and memory resources
   available via the orchestrator
 
-| {shape: rectangle}
+| {
+  shape: rectangle
+  class: [component]
+}
 
 platform.resources-plane.orchestrator.storage: |md
   ### Platform storage
@@ -91,7 +102,10 @@ platform.resources-plane.orchestrator.storage: |md
 
   Persistent storage and claims
 
-| {shape: rectangle}
+| {
+  shape: rectangle
+  class: [component]
+}
 
 platform.security-plane.idp: |md
   ## Platform Identity provider
@@ -102,14 +116,20 @@ platform.security-plane.idp: |md
 
   human identity and source of truth
 
-| {shape: rectangle}
+| {
+  shape: rectangle
+  class: [container]
+}
 
 platform.security-plane.idp.slapd: |md
   OpenLDAP server
 
   [Component]
 
-| {shape: rectangle}
+| {
+  shape: rectangle
+  class: [component]
+}
 
 platform.security-plane.keycloak: |md
   ## Authentication and Authorization
@@ -118,7 +138,10 @@ platform.security-plane.keycloak: |md
 
   Authentication and authorisation layer
   for humans and applications.
-| {shape: rectangle}
+| {
+  shape: rectangle
+  class: [container]
+}
 
 platform.security-plane.vault: |md
   ## Secrets engine
@@ -127,16 +150,24 @@ platform.security-plane.vault: |md
   Platform service managing security and access for services.
   Human authentication via OIDC
 
-| {shape: rectangle}
+| {
+  shape: rectangle
+  class: [container]
+}
 
 # ## <Data plane> ###
 
 platform.data-plane: |md
   ## Platform Data plane
 
+  [Software System]
+
   Platform services supporting
   data persistence for workloads
-| {shape: rectangle}
+| {
+  shape: rectangle
+  class: [software-system]
+}
 
 platform.data-plane.postgres-clusters: |md
   ## Patroni Postgres manager
@@ -144,37 +175,39 @@ platform.data-plane.postgres-clusters: |md
   [Container: Patroni Postgres]
 
   Patroni postgres manager
-| {shape: rectangle}
+| {
+  shape: rectangle
+  class: [container]
+}
 
 platform.data-plane.postgres-clusters.default: |md
   Default postgres DB cluster
 
   [Component: PostgreSQL]
 
-| {shape: cylinder}
+| {
+  shape: cylinder
+  class: [component]
+}
 
 # ## </Data Plane>
 
 # # Relationships
 
 # LDAP needs resources
-platform.security-plane.idp -> platform.resources-plane.orchestrator.compute: Compute resources
+# platform.security-plane.idp -> platform.resources-plane.orchestrator.compute: Compute resources
 
-platform.security-plane.idp -> platform.resources-plane.orchestrator.storage: Persistent storage claim
+# platform.security-plane.idp -> platform.resources-plane.orchestrator.storage: Persistent storage claim
 
-# Keycloak needs resources
-platform.security-plane.keycloak -> platform.resources-plane.orchestrator.compute: Compute resources
-platform.security-plane.keycloak -> platform.resources-plane.orchestrator.storage: Persistent storage claim
-# Keycloak needs DB
-platform.security-plane.keycloak -> platform.data-plane.postgres-clusters.default: State persistence DB
+# # Keycloak needs resources
+# platform.security-plane.keycloak -> platform.resources-plane.orchestrator.compute: Compute resources
+# platform.security-plane.keycloak -> platform.resources-plane.orchestrator.storage: Persistent storage claim
+# # Keycloak needs DB
+# platform.security-plane.keycloak -> platform.data-plane.postgres-clusters.default: State persistence DB
 
-platform.security-plane.keycloak -> platform.security-plane.idp: External identity store
+# platform.security-plane.keycloak -> platform.security-plane.idp: External identity store
 
-operator -> platform.security-plane.vault: Log In
-platform.security-plane.vault -> platform.security-plane.keycloak: Authorize
-# LDAP authenticates users
-platform.security-plane.idp -> platform.security-plane.keycloak: Authenticate
-# Keycloak passes claims to service
-platform.security-plane.keycloak -> platform.security-plane.vault: Pass attributes
-# Vault authorises
-platform.security-plane.vault -> operator: authorize
+# Suspend all shapes and connections,
+# use them later in models.
+**: suspend
+(** -> **)[*]: suspend
