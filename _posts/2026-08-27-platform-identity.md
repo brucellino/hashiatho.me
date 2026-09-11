@@ -14,13 +14,49 @@ tags:
   - consul
 ---
 
+## Introduction and goals
+
 Building a platform is all well and good, but it's no use if only the Boss Man can use it.
 How do we set things up so that other people can actually access the services in the platform?
 
 This is such an obvious question that it has gone overlooked in Hashi@Home until now, because I am the only one using the platform!
 Specific tokens issued to me by Vault, Nomad and Consul have been enough for me to access the services and be productive with the platform itself, but this is not acceptable in a scenario where there are (shock!) several users with different roles and permissions.
 
+The context to remember is that we are doing this in order to allow **customers to access our platform** -- access must be governed according to known policies, and be **self-service**.
+
+This article is a small design study to with some practical considerations on how to allow our first users (platform operators) to access platform services.
+
+We start with a discussion on the architecture and background, then show how the relevant tooling can be deployed in various scenarios to satisfy our initial goals[^initial-goals]:
+
+> Operators should be able to access platform services with their own credentials
+
+### Requirements and Features
+
+To be a bit more formal, instead of expressing a goal, we express a requirement with some features.
+The requirement becomes an "acceptance requirement" (we can accept the situation once some statements become true), which in turn express features that we can test.
+
+{% highlight gherkin %}
+Requirement: An Operator should be granted access to Platform Services based on their own credentials
+
+Feature: Operators can use their home credentials to access a Platform Service
+
+Scenario: Platform operator in platform owner role can access Vault with admin policy
+
+  Given  I am user with owner role in assigned in their identity provider
+  When   I log into the Vault web interface via the OIDC provider
+  Then   The OIDC provider redirects me to my identity provider
+  Then   I am asked to authenticate with my personal credentials
+  And    The OIDC provider authorises my access to the service
+{% endhighlight %}
+
+The task then is to enable this feature for our platform.
+
+After a brief digression into the definition of terms, we'll design an implementation of the identity architecture that can be deployed in various scenarios to provide it.
+Although we'll go a bit into the assumptions and standards (OAuth and OIDC -- see later) we want to adopt, the full-blown details of how we exploit those for wider adoption for subsequent discussion.
+
 ## Identity architecture
+
+Let's start by setting the stage for what we mean by some commonly-loaded terms.
 
 When we say "identity", we usually mean
 
@@ -53,6 +89,8 @@ We are going to call this the _"Identity Architecture_".
 
 ## Implementation of Identity Architecture
 
+Now that we have a working definition identity architecture, let's start working on an implementation as actual services with specific technologies.
+
 The context of the platform identity service is shown in the diagram below, where it is designated "Authentication and Authorisation Service".
 
 ```plantuml
@@ -61,10 +99,17 @@ The context of the platform identity service is shown in the diagram below, wher
 
 ```
 
-### Access: Authentication and Authorisation workflows
+This service starts to provide the **"Access"** feature we described above in the introduction.
 
-In this context, someone wishing to access one of the Platform Services[^NotWorkloads] is redirected to the AAI, which then requests authentication of the user at their organisatin's identity provider (IdP).
-After successful authentication, the AAI looks up what the user's attributes as defined in the authorisation realm, and then passes those to the service which the user initally wanted to use.
+### Feature: Access -- Authentication and Authorisation workflows
+
+Recall the scenario we initially described as an acceptance criterion?
+In that context, someone wishing to access one of the Platform Services[^NotWorkloads] is redirected to the AAI, which then requests authentication of the user at their organisation's identity provider (IdP).
+After successful authentication, the AAI looks up what the user's attributes as defined in the authorisation realm, and then passes those to the service which the user initially wanted to use.
+
+The "platform service" we're using in this acceptance requirement is the Platform Secrets engine, Hashicorp Vault.
+However, bear in mind that this requirement can and should be extended to all the other platform services (orchestrator/Nomad, service mesh/Consul, observability/Clickhouse, _etc_.)
+
 The service's policies then map those attributes to permissions and roles in its context, and authorises the user to access it with those same permissions and roles.
 
 This is shown in the sequence diagram below:
@@ -101,11 +146,7 @@ Keycloak sits in the ID management component of the Security Plane.
 The external identity store (The LDAP directory of identities) is not shown, because indeed it is not _part_ of the platform, but actually owned by the organisation which is the _customer_ of the platform.
 We attach our platform to it in order to allow the organisation to retain sovereignty over their identities.
 
-Before we close the section on architecture, let's take a closer look at the Keycloak component diagram.
-
-#### Container View
-
-Consider the case where the platform operator wants to access the Vault instance:
+Before we close the section on architecture, let's take a closer look at the Keycloak container view where the platform operator wants to access the Vault instance:
 
 <!--```structurizr
 
@@ -131,13 +172,9 @@ Keycloak's OIDC endpoint acts as a [Vault Authentication method](https://develop
 Keycloak is configured to use the LDAP external identity store as a source of truth for identities.
 If the user us able to provide valid identification credentials for that identity, Keycloak returns valid authorisation claims, and Vault authorises access to the user.
 
-So far, so good -- the architecture can work.
+So far, so good but this high-level view of the architecture does not yet reveal the dependencies in terms of platform services and flows.
 
-
-#### Component View
-
-There is more to the architecture than just the containers of the software system.
-This high-level view of the architecture does not yet reveal the dependencies in terms of platform services and flows.
+The component view exposes what underlying platform components are needed:
 
 <!--
 Add a component view to each of the services.
@@ -150,13 +187,14 @@ Add a component view to each of the services.
 
 ```
 
-Now, we need to consider deployment models and their tradeoffs.
+So, we have a fairly explicit C4 representation of the architecture.
+It shows what we need to bring to the table, and how we integrate with the platform itself.
+All we need to do is fill in the boxes with actual technology, and deploy the sucker!
 
 ## Deployment Scenarios
 
 Let's define a few hypothetical deployment scenarios.
 These can be split grosso-modo between deployments _in plane_ and _out of plane_.
-
 
 > "In plane" deployments place the services in the Platform Resource Plane, meaning that the services themselves are orchestrated by the platform itself while "out of plane" deployments mean that the services are not orchestrated by the platform, but by some external controller.
 
@@ -168,7 +206,6 @@ This external controller would be something independent, bound to the deploy env
 In this scenario, we deploy the authentication and authorisation services as a single workload into the resource plane.
 
 This means we write a single Nomad job which contains the relevant tasks and services for both the LDAP backing service, as well as the Keycloak service.
-
 
 <!--
 identity source in database, file or other
@@ -259,6 +296,7 @@ There is still much analysis to perform, and experience to gain, but we can say 
 
 ## Footnotes and References
 
+[^initial-goals]: We do not yet go into the overall federation of services and access policies for federated users, but we will get there eventually!
 [^noz]: Don't come at me with your weird American spelling. I know everyone calls it AuthN/Z where that zed grinds my nerves, and I know I'm not going to be able to change it. But by Zeus I will spell my own writing properly!
 [^2010]: I'm referring to the early to mid-2010s here.
 [^2020]: I'm referring to the early 2020's here
