@@ -22,15 +22,15 @@ Specific tokens issued to me by Vault, Nomad and Consul have been enough for me 
 
 ## Identity architecture
 
-When we say "identity", we mean usually mean
+When we say "identity", we usually mean
 
 > a digital representation of a person which can be used to authenticate a human
 
 Authentication is the means of providing a proof of your actual identity to a computer, but it is often accompanied by the natural next step: **authorisation**[^noz].
-Authorisation is the means of granting **permission** to a human to access a given service, and when at access is granted, deciding on what level.
+Authorisation is the means of granting **permission** to a human to access a given service, and when that access is granted, deciding on what level.
 Another term which is used to describe the "level" of permission is the "role" that the human identity assumes inside that service.
 
-Put together, these two terms authentication and authorisation are often referred to as "AuthN/Z", such is the frequency with which these concepts coexist.
+Put together, these two terms _"authentication"_ and _"authorisation"_ are often referred to as "AuthN/Z", such is the frequency with which these concepts coexist.
 In the ancient past[^2010], each service had an internal representation of its users, and therefore contained the identities as well as the policies for authorisation.
 One of the many downsides to that approach was that identities are duplicated across all of the services which the user wants to use[^many-other-downsides].
 In the enterprisey olden days[^2020], a separation of concerns was introduced where an _identity provider_ was introduced to the picture to act as a central source of truth for identities, but applications still contained their own authorisation engines internally.
