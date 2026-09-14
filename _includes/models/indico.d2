@@ -1,0 +1,110 @@
+vars: {
+  d2-config: {
+    layout-engine: elk
+    theme-id: 101
+    # sketch: true
+  }
+}
+
+classes: {
+  tier-container: {
+    style: {
+      fill-pattern: "none"
+      fill: transparent
+      stroke-width: 0
+    }
+  }
+
+  frontend: {
+    style: {
+      border-radius: 5
+    }
+  }
+
+  application: {
+    style: {
+      border-radius: 5
+    }
+  }
+  backend: {
+    style: {
+      border-radius: 5
+    }
+  }
+}
+
+grid-rows: 3
+
+User <-> frontend.nginx
+User: {
+  shape: image
+  icon: https://icons.d2lang.com/essentials%2F365-user.svg
+ # height: 50
+ # width: 5
+}
+
+frontend: Frontend Tier {
+  grid-columns: 2
+  nginx.class: frontend
+  nginx.icon: https://icons.d2lang.com/dev%2Fnginx.svg
+  redis.class: frontend
+
+  nginx.Auth: authnz {
+    label: AuthN/Z
+  }
+  redis.icon: https://icons.d2lang.com/dev%2Fredis.svg
+  redis.shape: stored_data
+  nginx <--> redis
+  class: tier-container
+  label.near: border-top-center
+}
+
+external: External Services {
+  grid-columns: 2
+  class: tier-container
+  email.shape: cloud
+
+  idp.shape: cloud
+}
+
+
+application: Application Tier {
+  grid-columns: 2
+  class: tier-container
+  uwsgi.class: application
+  uwsgi.indico: {
+    class: application
+    icon: https://icons.d2lang.com/dev%2Fpython.svg
+
+    storage: {
+      shape: cylinder
+    }
+    _.indico->storage
+  }
+  # label.near: center-right
+
+}
+
+backing: Backing Services {
+  grid-columns: 2
+  class: tier-container
+
+  celery.class: backend
+  celery.shape: queue
+  postgres.class: backend
+  postgres.shape: cylinder
+  postgres.icon: https://icons.d2lang.com/dev%2Fpostgresql.svg
+  label.near: border-bottom-center
+}
+
+frontend.nginx.Auth <-> external.idp
+frontend.redis <-> backing.celery
+application.uwsgi -> frontend.nginx
+
+backing.celery <-> application.uwsgi.indico
+
+application.uwsgi.indico -> frontend.redis
+application.uwsgi.indico <-> backing.postgres
+backing.celery -> external.email
+
+external.email -> User
