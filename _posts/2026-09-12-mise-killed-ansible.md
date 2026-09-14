@@ -46,10 +46,18 @@ Ansible is definitely not "less"
 
 ## Provisioning with Mise
 
-Along has come a tool which seems to do a lot of things right : mise.
+Along has come a tool which seems to do a lot of things right: [_Mise-en-Place_](https://mise.jdx.dev), or just `mise`.
+
+Mise bills itself as
+
+> A comfortable home for your development workflow.
+>
+> -- _[mise.jdx.dev](https://mise.jdx.dev/)_
+
 I first started using it to replace all of the language-specific package managers (ruby, java, python, go...).
 The ergonomics were immediately attractive and left no need for further convincing.
-All through 2024 and 2025, Mise became the _only_ way to provision a runtime.
+All through 2024 and 2025, Mise became the _only_ way to provision a runtime[^thisblog].
+
 Of course, this only provisioned userspace things, which was indeed what I wanted, but the user of those userspace things still needed to actually be provisioned, typically by something else.
 The system needed to be bootstrapped, shall we say, with users, packages, and some other configuration which was typically outside of user space.
 This was the part typically reserved for Anisble, which could trundle in under SSH and do root-level things to the image.
@@ -307,4 +315,5 @@ The application declaration contains only what is required.
 
 ## Footnotes and references
 
+[^thisblog]: I actually recently pulled it into this very blog.
 [^actual_deps]: These always have to be interrogated. The documentation makes assumptions about the user who is reading it, what they intend on doing, and what the context is. From the indico documentation, this seems like the authors assume that the application is being deployed into a static, persistent environment, not an ephemeral one like ours.
