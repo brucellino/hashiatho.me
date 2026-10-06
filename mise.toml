@@ -1,6 +1,6 @@
 [tools]
 ruby = "4.0.7"
-prek = "0.4.3"
+prek = "0.5.5"
 d2 = "0.9.0"
 
 [tasks.'bundle:install']
