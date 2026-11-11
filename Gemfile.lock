@@ -96,7 +96,7 @@ GEM
     metrics (0.15.0)
     net-http (0.9.1)
       uri (>= 0.11.1)
-    nokogiri (1.19.4-x86_64-linux-gnu)
+    nokogiri (1.19.5-x86_64-linux-gnu)
       racc (~> 1.4)
     pathutil (0.16.2)
       forwardable-extended (~> 2.6)
