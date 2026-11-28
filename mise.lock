@@ -3,44 +3,51 @@
 lockfile_version = 1
 
 [[tools.d2]]
-version = "0.9.0"
+version = "v0.10.0"
 backend = "aqua:d2lang/d2"
-specifiers = ["0.9.0"]
+specifiers = ["v0.10.0"]
 
 [tools.d2."platforms.linux-arm64"]
-checksum = "sha256:ac2c028697199479acb321db1e3d68caee9f2ba492ed73caa3cd13f3829bf913"
-url = "https://github.com/d2lang/d2/releases/download/v0.9.0/d2-v0.9.0-linux-arm64.tar.gz"
-url_api = "https://api.github.com/repos/d2lang/d2/releases/assets/549448988"
+checksum = "sha256:65e7b3a287fc97a49ffe3dc7762a570db978024127b1cd257f8f17f48c76f3df"
+url = "https://github.com/d2lang/d2/releases/download/v0.10.0/d2-v0.10.0-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/d2lang/d2/releases/assets/800723562"
+provenance = "github-attestations"
 
 [tools.d2."platforms.linux-arm64-musl"]
-checksum = "sha256:ac2c028697199479acb321db1e3d68caee9f2ba492ed73caa3cd13f3829bf913"
-url = "https://github.com/d2lang/d2/releases/download/v0.9.0/d2-v0.9.0-linux-arm64.tar.gz"
-url_api = "https://api.github.com/repos/d2lang/d2/releases/assets/549448988"
+checksum = "sha256:65e7b3a287fc97a49ffe3dc7762a570db978024127b1cd257f8f17f48c76f3df"
+url = "https://github.com/d2lang/d2/releases/download/v0.10.0/d2-v0.10.0-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/d2lang/d2/releases/assets/800723562"
+provenance = "github-attestations"
 
 [tools.d2."platforms.linux-x64"]
-checksum = "sha256:5669ddc46b99e942cc96078f4a4e36d5e62103348f4c05179ede27802fdd87a9"
-url = "https://github.com/d2lang/d2/releases/download/v0.9.0/d2-v0.9.0-linux-amd64.tar.gz"
-url_api = "https://api.github.com/repos/d2lang/d2/releases/assets/549448945"
+checksum = "sha256:8d0431301a1c2cccb73e4895dc8144113b37fdc56d00c7666f6177b9ec90cd9a"
+url = "https://github.com/d2lang/d2/releases/download/v0.10.0/d2-v0.10.0-linux-amd64.tar.gz"
+url_api = "https://api.github.com/repos/d2lang/d2/releases/assets/800723441"
+provenance = "github-attestations"
 
 [tools.d2."platforms.linux-x64-musl"]
-checksum = "sha256:5669ddc46b99e942cc96078f4a4e36d5e62103348f4c05179ede27802fdd87a9"
-url = "https://github.com/d2lang/d2/releases/download/v0.9.0/d2-v0.9.0-linux-amd64.tar.gz"
-url_api = "https://api.github.com/repos/d2lang/d2/releases/assets/549448945"
+checksum = "sha256:8d0431301a1c2cccb73e4895dc8144113b37fdc56d00c7666f6177b9ec90cd9a"
+url = "https://github.com/d2lang/d2/releases/download/v0.10.0/d2-v0.10.0-linux-amd64.tar.gz"
+url_api = "https://api.github.com/repos/d2lang/d2/releases/assets/800723441"
+provenance = "github-attestations"
 
 [tools.d2."platforms.macos-arm64"]
-checksum = "sha256:eaf6c0c143e56dd9fa97bfb6df25ea9c1ebce40245f056a0768cf1a6c15d3064"
-url = "https://github.com/d2lang/d2/releases/download/v0.9.0/d2-v0.9.0-macos-arm64.tar.gz"
-url_api = "https://api.github.com/repos/d2lang/d2/releases/assets/549449061"
+checksum = "sha256:69dd590f9723d85013f3af23a014acd73cd86ebe3bac665fed7add1c5c457c09"
+url = "https://github.com/d2lang/d2/releases/download/v0.10.0/d2-v0.10.0-macos-arm64.tar.gz"
+url_api = "https://api.github.com/repos/d2lang/d2/releases/assets/800723775"
+provenance = "github-attestations"
 
 [tools.d2."platforms.macos-x64"]
-checksum = "sha256:cad39576a480d6bb02ea142fef1726647914b0d2da51ccc9b30b660a2b1babf0"
-url = "https://github.com/d2lang/d2/releases/download/v0.9.0/d2-v0.9.0-macos-amd64.tar.gz"
-url_api = "https://api.github.com/repos/d2lang/d2/releases/assets/549449033"
+checksum = "sha256:5e5411a7ccb7e16d1625a287ae462f41f9108e9c5d200e16029adabcc3406c02"
+url = "https://github.com/d2lang/d2/releases/download/v0.10.0/d2-v0.10.0-macos-amd64.tar.gz"
+url_api = "https://api.github.com/repos/d2lang/d2/releases/assets/800723665"
+provenance = "github-attestations"
 
 [tools.d2."platforms.windows-x64"]
-checksum = "sha256:5f63b643de8f5a6dfb922d172e1b5496e4caf47497c33c4427cf1127f28c340f"
-url = "https://github.com/d2lang/d2/releases/download/v0.9.0/d2-v0.9.0-windows-amd64.tar.gz"
-url_api = "https://api.github.com/repos/d2lang/d2/releases/assets/549449113"
+checksum = "sha256:cf82cb391dc88acd670efe41f468a6807b01296906f1f92ec6c9c1c6da797435"
+url = "https://github.com/d2lang/d2/releases/download/v0.10.0/d2-v0.10.0-windows-amd64.tar.gz"
+url_api = "https://api.github.com/repos/d2lang/d2/releases/assets/800723850"
+provenance = "github-attestations"
 
 [[tools.prek]]
 version = "0.5.12"
